@@ -158,46 +158,52 @@ ClickTok/
 
 ## Installation
 
+### 🚀 One-Command Installation (Recommended)
+
+**Windows:**
+```bash
+cd ClickTok
+setup.bat
+```
+
+**macOS/Linux:**
+```bash
+cd ClickTok
+./setup.sh
+```
+
+**Or use Python directly:**
+```bash
+python setup.py
+```
+
+That's it! The setup script will automatically:
+- ✅ Install all Python packages
+- ✅ Install Playwright browsers
+- ✅ Check FFmpeg
+- ✅ Create directories
+- ✅ Verify installation
+
+**Time required:** 5-10 minutes
+
+### 📖 Detailed Installation Guide
+
+For detailed installation instructions, troubleshooting, and alternative methods, see:
+- **[INSTALL.md](INSTALL.md)** - Complete installation guide
+
 ### Prerequisites
 
 - **Python 3.8+**
-- **FFmpeg** (for video processing)
+- **FFmpeg** (setup script will check and guide you)
 - **Internet connection**
 
-### Step 1: Install Python Dependencies
-
-```bash
-cd ClickTok
-pip install -r requirements.txt
-```
-
-### Step 2: Install Playwright Browsers
-
-```bash
-playwright install chromium
-```
-
-### Step 3: Install FFmpeg
-
-**Windows:**
-1. Download from: https://ffmpeg.org/download.html
-2. Add to PATH
-
-**Mac:**
-```bash
-brew install ffmpeg
-```
-
-**Linux:**
-```bash
-sudo apt install ffmpeg
-```
-
-### Step 4: Verify Installation
+### Quick Verify
 
 ```bash
 python main.py --version
 ```
+
+If you see `ClickTok 1.0.0`, you're ready to go! 🎉
 
 ---
 

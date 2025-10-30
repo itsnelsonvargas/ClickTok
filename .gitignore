@@ -1,0 +1,72 @@
+# ClickTok .gitignore
+
+# Credentials and Secrets
+config/credentials.json
+*.env
+.env
+
+# Database
+data/products.db
+data/*.db
+
+# Generated Content
+data/products/*
+data/videos/*
+data/tiktok_cookies.json
+
+# Logs
+logs/*.log
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual Environment
+venv/
+env/
+ENV/
+.venv
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Temporary Files
+temp-audio.m4a
+*.tmp
+*.temp
+
+# User-specific
+assets/logo.png
+assets/music/*.mp3
+assets/fonts/*
+
+# Playwright
+.pytest_cache/
+playwright/.cache/
+
+# OS
+Thumbs.db
+.DS_Store

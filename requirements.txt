@@ -1,0 +1,40 @@
+# Core Dependencies
+requests>=2.31.0
+beautifulsoup4>=4.12.0
+lxml>=4.9.0
+
+# Video Processing - using flexible versions for Python 3.13 compatibility
+moviepy>=1.0.3
+Pillow>=10.0.0  # Flexible version for Python 3.13
+opencv-python>=4.8.0
+
+# Text-to-Speech
+pyttsx3>=2.90
+gTTS>=2.4.0
+
+# Browser Automation
+playwright>=1.40.0
+selenium>=4.15.0
+
+# AI/NLP for Captions (Optional)
+openai>=1.0.0
+anthropic>=0.7.0
+
+# GUI
+customtkinter>=5.2.0
+
+# Utilities
+python-dotenv>=1.0.0
+schedule>=1.2.0
+pandas>=2.0.0
+pyautogui>=0.9.54
+
+# Image Processing
+imageio>=2.33.0
+imageio-ffmpeg>=0.4.9
+
+# Additional dependencies that might be needed
+numpy>=1.24.0
+decorator>=4.4.2
+proglog>=0.1.10
+tqdm>=4.66.0

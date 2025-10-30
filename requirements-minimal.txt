@@ -1,0 +1,20 @@
+# Minimal Requirements for Python 3.13+
+# Use this if the full requirements.txt fails
+
+# Core packages (highest priority)
+requests
+beautifulsoup4
+lxml
+Pillow
+numpy
+
+# Video processing
+moviepy
+imageio
+imageio-ffmpeg
+
+# Browser automation
+playwright
+
+# Utilities
+python-dotenv
