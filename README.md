@@ -252,7 +252,11 @@ Edit `config/settings.py` to adjust:
 
 ### Option 1: GUI Dashboard (Recommended)
 
-Launch the visual dashboard:
+**Easiest way (Windows):**
+
+Just **double-click** `ClickTok.bat` in the ClickTok folder!
+
+**Or use command line:**
 
 ```bash
 python main.py

@@ -4,7 +4,7 @@ beautifulsoup4>=4.12.0
 lxml>=4.9.0
 
 # Video Processing - using flexible versions for Python 3.13 compatibility
-moviepy>=1.0.3
+moviepy>=1.0.3,<2.0.0  # Pin to 1.x (2.x has different import structure)
 Pillow>=10.0.0  # Flexible version for Python 3.13
 opencv-python>=4.8.0
 
@@ -35,6 +35,6 @@ imageio-ffmpeg>=0.4.9
 
 # Additional dependencies that might be needed
 numpy>=1.24.0
-decorator>=4.4.2
+decorator>=4.4.2,<5.0.0  # moviepy 1.x requires decorator <5.0
 proglog>=0.1.10
 tqdm>=4.66.0

@@ -1,158 +1,142 @@
 ╔══════════════════════════════════════════════════════════════════════╗
 ║                                                                      ║
-║                    CLICKTOK - START HERE                             ║
+║              FIRST TIME SETUP - READ THIS FIRST!                     ║
 ║                                                                      ║
 ╚══════════════════════════════════════════════════════════════════════╝
 
 
-👋 Welcome to ClickTok!
+You're seeing the error: "ModuleNotFoundError: No module named 'moviepy'"
 
-✅ UPDATE: All setup errors have been fixed!
-   See: ALL_FIXES_SUMMARY.txt for complete details
-
-This file will help you get started in 2 simple steps.
+This means dependencies haven't been installed yet.
 
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-  STEP 1: Install Dependencies
+  SOLUTION: Install Dependencies First
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-Choose ONE method based on your operating system:
+Before running ClickTok for the first time, you MUST install dependencies.
 
 
 ┌─────────────────────────────────────────────────────────────────────┐
-│  WINDOWS USERS (Easiest!)                                           │
+│  METHOD 1: FULLY AUTOMATIC (EASIEST!) ⭐                            │
 └─────────────────────────────────────────────────────────────────────┘
 
-Method 1: Double-click this file:
-  → setup.bat
+Just double-click ClickTok.bat again!
 
-Method 2: Open Command Prompt in this folder and type:
-  → setup.bat
-
-Method 3: Or use Python directly:
-  → python setup.py
+The launcher now AUTOMATICALLY:
+  1. Checks if dependencies are installed
+  2. If not, installs them WITHOUT asking
+  3. Just wait 5-10 minutes (no interaction needed!)
+  4. ClickTok launches automatically when done!
 
 
 ┌─────────────────────────────────────────────────────────────────────┐
-│  MAC / LINUX USERS                                                   │
+│  METHOD 2: Run Setup Manually                                       │
 └─────────────────────────────────────────────────────────────────────┘
 
-Open Terminal in this folder and type:
-  → chmod +x setup.sh
-  → ./setup.sh
-
-Or use Python directly:
-  → python3 setup.py
-
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-  STEP 2: Run ClickTok
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-After installation completes, launch ClickTok:
+1. Double-click: setup.bat
+2. Wait 5-10 minutes
+3. Then double-click: ClickTok.bat
 
 
 ┌─────────────────────────────────────────────────────────────────────┐
-│  EASIEST WAY (Windows)                                               │
+│  METHOD 3: Manual Installation (Advanced)                           │
 └─────────────────────────────────────────────────────────────────────┘
 
-Just double-click one of these files:
+Open Command Prompt in this folder and run:
 
-  → ClickTok.bat       (Launches GUI - Recommended!)
-  → ClickTok-CLI.bat   (Launches CLI mode)
+  python -m pip install requests beautifulsoup4 lxml Pillow numpy moviepy imageio imageio-ffmpeg playwright python-dotenv
 
-
-┌─────────────────────────────────────────────────────────────────────┐
-│  OR USE COMMAND LINE                                                 │
-└─────────────────────────────────────────────────────────────────────┘
-
-  → python main.py         (GUI mode)
-  → python main.py --cli   (CLI mode)
+  python -m playwright install chromium
 
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-  IMPORTANT: Run From ClickTok Folder!
+  WHAT GETS INSTALLED
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-Make sure you're in the ClickTok folder when running these commands!
+Setup will install:
+  ✓ moviepy - Video creation
+  ✓ Pillow - Image processing
+  ✓ playwright - Browser automation
+  ✓ requests - HTTP requests
+  ✓ And 10+ other required packages
+  ✓ Playwright Chromium browser
 
-Check your current location:
-  Windows: Run 'cd' in Command Prompt
-  Mac/Linux: Run 'pwd' in Terminal
-
-If you're not in the ClickTok folder, navigate to it first:
-  Windows: cd C:\Users\user\Desktop\ClickTok
-  Mac/Linux: cd ~/Desktop/ClickTok
+Total download: ~650 MB
+Time: 5-10 minutes
 
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-  WHAT THE SETUP DOES
+  CORRECT ORDER TO RUN
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-The setup script automatically:
-  ✓ Checks Python version
-  ✓ Installs all required packages
-  ✓ Installs Playwright browser
-  ✓ Checks for FFmpeg
-  ✓ Creates necessary folders
-  ✓ Verifies everything works
+FIRST TIME:
+  1. setup.bat      ← Run this FIRST (one time only)
+  2. ClickTok.bat   ← Then run this
 
-Time: About 5-10 minutes
+DAILY USE:
+  → ClickTok.bat    ← Just this!
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  PYTHON 3.13 USERS - SPECIAL NOTE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+If you have Python 3.13, some packages might fail to install.
+
+See: PYTHON_313_FIX.txt for solutions
+
+Recommended: Use Python 3.11 or 3.12 for best compatibility
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  QUICK FIX RIGHT NOW
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Open Command Prompt in the ClickTok folder and run:
+
+  setup.bat
+
+Wait for it to complete, then:
+
+  ClickTok.bat
 
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
   TROUBLESHOOTING
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-Problem: "python is not recognized"
-Solution: Install Python from https://python.org
-          Make sure to check "Add Python to PATH" during installation
+Problem: setup.bat fails
+Solution: See PYTHON_313_FIX.txt or INSTALL.md
 
-Problem: "setup.bat is not recognized"
-Solution: Make sure you're in the ClickTok folder
-          Right-click the folder → Open in Terminal/Command Prompt
+Problem: Installation takes forever
+Solution: This is normal! Be patient, it's downloading ~650 MB
 
-Problem: "Permission denied" (Mac/Linux)
-Solution: Run: chmod +x setup.sh
-
-Problem: Setup fails
-Solution: Try running directly: python setup.py
+Problem: Some packages fail
+Solution: See PYTHON_313_FIX.txt for Python 3.13 workarounds
 
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-  NEED MORE HELP?
+  AFTER INSTALLATION
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-Read these files for detailed help:
-  • INSTALL.md - Complete installation guide
-  • README.md - Full documentation
-  • INSTALLATION_SUMMARY.txt - Visual guide
+Once setup completes successfully:
 
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-  QUICK START SUMMARY
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-1. Open Command Prompt / Terminal
-
-2. Navigate to ClickTok folder:
-   cd C:\Users\user\Desktop\ClickTok
-
-3. Run setup:
-   setup.bat (Windows)
-   ./setup.sh (Mac/Linux)
-
-4. Wait for installation to complete
-
-5. Launch ClickTok:
-   python main.py
-
-6. Start earning! 💰
+1. Double-click: ClickTok.bat
+2. GUI will open
+3. Start using ClickTok!
+4. No need to run setup.bat again
 
 
 ═══════════════════════════════════════════════════════════════════════
 
-                    🚀 LET'S GET STARTED! 🚀
+              🎯 ACTION REQUIRED NOW
+
+         Double-click: setup.bat (wait 5-10 min)
+         Then run: ClickTok.bat
+
+         OR
+
+         Just run ClickTok.bat and let it install automatically!
 
 ═══════════════════════════════════════════════════════════════════════

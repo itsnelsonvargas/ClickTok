@@ -26,11 +26,25 @@ python main.py
 ## Common Commands
 
 ### Launch GUI
+
+**Easiest (Windows):**
+```bash
+Double-click: ClickTok.bat
+```
+
+**Command line:**
 ```bash
 python main.py
 ```
 
 ### Launch CLI
+
+**Easiest (Windows):**
+```bash
+Double-click: ClickTok-CLI.bat
+```
+
+**Command line:**
 ```bash
 python main.py --cli
 ```

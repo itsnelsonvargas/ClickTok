@@ -7,7 +7,7 @@ import json
 import time
 import random
 from pathlib import Path
-from typing import Dict, Optional
+from typing import Dict, Optional, Tuple
 from datetime import datetime
 
 try:

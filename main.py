@@ -39,46 +39,53 @@ def check_dependencies():
 
     if missing_packages:
         print("=" * 70)
-        print("  ⚠️  MISSING DEPENDENCIES DETECTED")
+        print("  ⚠️  MISSING DEPENDENCIES - Auto-Installing...")
         print("=" * 70)
         print("\nThe following packages are not installed:")
         for pkg in missing_packages:
             print(f"  • {pkg}")
 
-        print("\nYou have two options:\n")
-        print("Option 1 (Recommended): Run the automated setup")
-        print("  python setup.py")
-        print("  OR")
-        print("  setup.bat (Windows) / ./setup.sh (Mac/Linux)")
-        print("\nOption 2: Install manually")
-        print("  pip install -r requirements.txt")
-        print("  python -m playwright install chromium")
-        print("\n" + "=" * 70)
+        print("\n🔄 Starting automatic installation...")
+        print("This will take about 5-10 minutes. Please wait...\n")
 
-        response = input("\nRun automated setup now? (y/n): ").strip().lower()
-        if response == 'y':
-            print("\nLaunching setup.py...\n")
-            try:
-                result = subprocess.run([sys.executable, "setup.py"], check=True)
-                if result.returncode == 0:
-                    print("\n✅ Setup complete! Please restart ClickTok.")
-                    return False
-            except subprocess.CalledProcessError:
-                print("\n❌ Setup failed. Please install manually.")
+        try:
+            # Run setup automatically
+            setup_script = Path(__file__).parent / "setup.py"
+            result = subprocess.run([sys.executable, str(setup_script)])
+
+            if result.returncode == 0:
+                print("\n" + "=" * 70)
+                print("  ✅ Setup Complete!")
+                print("=" * 70)
+                print("\nDependencies installed successfully!")
+                print("ClickTok will now start...\n")
+                return True  # Continue to launch
+            else:
+                print("\n" + "=" * 70)
+                print("  ❌ Setup Failed")
+                print("=" * 70)
+                print("\nAutomatic installation failed.")
+                print("\nPlease try manual installation:")
+                print("  1. Run: python setup.py")
+                print("  2. Or run: setup.bat (Windows) / ./setup.sh (Mac/Linux)")
+                print("  3. See: INSTALL.md for troubleshooting")
+                print("\n" + "=" * 70)
                 return False
-        else:
-            print("\nPlease install dependencies and try again.")
+
+        except Exception as e:
+            print(f"\n❌ Error during setup: {e}")
+            print("\nPlease install manually:")
+            print("  pip install -r requirements.txt")
+            print("  python -m playwright install chromium")
             return False
 
     return True
 
 
-from config.settings import LOG_CONFIG
-from gui.dashboard import ClickTokDashboard
-
-
 def setup_logging():
     """Setup logging configuration"""
+    from config.settings import LOG_CONFIG
+
     logging.basicConfig(
         level=LOG_CONFIG['log_level'],
         format=LOG_CONFIG['log_format'],
@@ -91,6 +98,8 @@ def setup_logging():
 
 def launch_gui():
     """Launch the GUI dashboard"""
+    from gui.dashboard import ClickTokDashboard
+
     print("=" * 60)
     print("  ClickTok - TikTok Affiliate Marketing Automation")
     print("=" * 60)
@@ -106,7 +115,7 @@ def launch_cli():
     from src.product_fetcher import ProductFetcher
     from src.video_creator import VideoCreator
     from src.caption_generator import CaptionGenerator
-    from config.settings import *
+    import config.settings as settings
     import json
 
     print("=" * 60)
@@ -114,10 +123,10 @@ def launch_cli():
     print("=" * 60)
 
     # Load credentials
-    with open(BASE_DIR / "config" / "credentials.json") as f:
+    with open(settings.BASE_DIR / "config" / "credentials.json") as f:
         credentials = json.load(f)
 
-    db = Database(DATABASE_PATH)
+    db = Database(settings.DATABASE_PATH)
 
     while True:
         print("\n" + "=" * 60)
@@ -133,7 +142,7 @@ def launch_cli():
         choice = input("\nSelect option: ").strip()
 
         if choice == '1':
-            fetcher = ProductFetcher(credentials, PRODUCT_FILTERS)
+            fetcher = ProductFetcher(credentials, settings.PRODUCT_FILTERS)
             print("\nFetching products...")
             products = fetcher.fetch_trending_products(limit=20)
             for product in products:
@@ -152,14 +161,14 @@ def launch_cli():
                 print("\nNo products selected. Please select products first.")
                 continue
 
-            creator = VideoCreator(VIDEO_CONFIG, ASSETS_DIR)
-            caption_gen = CaptionGenerator(AI_CONFIG, HASHTAG_CONFIG, credentials)
+            creator = VideoCreator(settings.VIDEO_CONFIG, settings.ASSETS_DIR)
+            caption_gen = CaptionGenerator(settings.AI_CONFIG, settings.HASHTAG_CONFIG, credentials)
 
             print(f"\nCreating videos for {len(products)} products...")
             for product in products:
                 print(f"  Creating: {product['name']}")
                 caption, hashtags = caption_gen.create_full_post(product)
-                video_path = VIDEOS_DIR / f"{product['product_id']}_video.mp4"
+                video_path = settings.VIDEOS_DIR / f"{product['product_id']}_video.mp4"
                 if creator.create_product_video(product, video_path):
                     db.add_video({
                         'product_id': product['product_id'],
@@ -205,18 +214,89 @@ def main():
     # Check dependencies (unless skipped)
     if not args.skip_check:
         if not check_dependencies():
-            print("\n❌ Cannot start ClickTok without dependencies.")
-            print("Please run: python setup.py")
+            print("\n❌ Cannot start ClickTok.")
+            print("Please run setup manually: python setup.py")
             sys.exit(1)
 
     # Setup logging
-    setup_logging()
+    try:
+        setup_logging()
+    except Exception as e:
+        # If logging setup fails, continue anyway
+        print(f"Warning: Logging setup failed: {e}")
 
     # Launch appropriate interface
-    if args.cli:
-        launch_cli()
-    else:
-        launch_gui()
+    max_retries = 2
+    retry_count = 0
+
+    while retry_count <= max_retries:
+        try:
+            if args.cli:
+                launch_cli()
+            else:
+                launch_gui()
+            break  # Success! Exit the retry loop
+
+        except ImportError as e:
+            retry_count += 1
+
+            if retry_count <= max_retries:
+                print("\n" + "=" * 70)
+                print("  ⚠️  Import Error Detected - Auto-Fixing...")
+                print("=" * 70)
+                print(f"\nError: {e}")
+                print("\n🔧 Attempting automatic repair...")
+                print(f"Retry attempt {retry_count}/{max_retries}")
+                print("\nReinstalling dependencies...\n")
+
+                # Try to fix by reinstalling dependencies
+                try:
+                    setup_script = Path(__file__).parent / "setup.py"
+                    result = subprocess.run([sys.executable, str(setup_script)])
+
+                    if result.returncode == 0:
+                        print("\n✅ Repair successful! Restarting ClickTok...\n")
+                        # Clear any cached imports
+                        if 'moviepy' in sys.modules:
+                            del sys.modules['moviepy']
+                        if 'moviepy.editor' in sys.modules:
+                            del sys.modules['moviepy.editor']
+                        continue  # Retry launch
+                    else:
+                        print("\n⚠️  Repair failed, trying again...")
+                        continue
+
+                except Exception as fix_error:
+                    print(f"\n⚠️  Repair error: {fix_error}")
+                    if retry_count < max_retries:
+                        print("Retrying...")
+                        continue
+            else:
+                # Max retries reached, show error
+                print("\n" + "=" * 70)
+                print("  ❌ Cannot Fix Automatically")
+                print("=" * 70)
+                print(f"\nError: {e}")
+                print("\nAutomatic repair failed after multiple attempts.")
+                print("\nManual intervention required:")
+                print("  1. Close this window")
+                print("  2. Open Command Prompt in ClickTok folder")
+                print("  3. Run: python -m pip uninstall moviepy -y")
+                print("  4. Run: python -m pip install moviepy")
+                print("  5. Run: ClickTok.bat again")
+                print("\nOr see PYTHON_313_FIX.txt for Python 3.13 issues")
+                print("\n" + "=" * 70)
+                sys.exit(1)
+
+        except Exception as e:
+            print("\n" + "=" * 70)
+            print("  ❌ Unexpected Error")
+            print("=" * 70)
+            print(f"\nError: {e}")
+            import traceback
+            traceback.print_exc()
+            print("\nPlease report this error with the above details.")
+            sys.exit(1)
 
 
 if __name__ == "__main__":

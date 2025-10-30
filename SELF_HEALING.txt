@@ -1,0 +1,274 @@
+╔══════════════════════════════════════════════════════════════════════╗
+║                                                                      ║
+║              SELF-HEALING & AUTO-REPAIR SYSTEM                       ║
+║                                                                      ║
+╚══════════════════════════════════════════════════════════════════════╝
+
+
+🔧 ClickTok now AUTOMATICALLY FIXES issues when they occur!
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  WHAT IS SELF-HEALING?
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Instead of showing error messages and asking the user to fix problems,
+ClickTok now automatically detects and repairs common issues.
+
+When ClickTok encounters an error, it:
+  1. Detects the problem type
+  2. Attempts automatic repair
+  3. Retries the operation
+  4. Only shows error if repair fails after multiple attempts
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  SELF-HEALING SCENARIOS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+1. MISSING DEPENDENCIES
+   Problem: "No module named 'moviepy'"
+   Solution: Automatically installs dependencies
+   Retries: Up to 2 times with different methods
+
+2. CORRUPTED INSTALLATION
+   Problem: "Import Error: No module named 'moviepy.editor'"
+   Solution: Force-reinstalls the problematic package
+   Retries: Up to 2 times
+
+3. PARTIAL INSTALLATION
+   Problem: Some packages installed, others failed
+   Solution: Tries alternative installation methods
+   Retries: Different installation strategies
+
+4. IMPORT ERRORS DURING LAUNCH
+   Problem: Module exists but can't be imported
+   Solution: Clears cache, reinstalls, retries
+   Retries: Up to 2 times with setup
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  HOW IT WORKS - LAYER BY LAYER
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Layer 1: ClickTok.bat (First Line of Defense)
+  ┌────────────────────────────────────────────────────────────┐
+  │ 1. Check if moviepy installed                              │
+  │ 2. If NO → Auto-install via setup.bat                      │
+  │ 3. If install fails → Try direct pip install               │
+  │ 4. If still fails → Show helpful error                     │
+  └────────────────────────────────────────────────────────────┘
+
+Layer 2: main.py (Pre-Launch Check)
+  ┌────────────────────────────────────────────────────────────┐
+  │ 1. Check critical packages before importing                │
+  │ 2. If missing → Auto-run setup.py                          │
+  │ 3. Wait for installation to complete                       │
+  │ 4. Continue launching                                      │
+  └────────────────────────────────────────────────────────────┘
+
+Layer 3: main.py (Import Error Handler)
+  ┌────────────────────────────────────────────────────────────┐
+  │ 1. Try to launch GUI/CLI                                   │
+  │ 2. If ImportError → Detect issue                           │
+  │ 3. Run setup.py to repair                                  │
+  │ 4. Clear import cache                                      │
+  │ 5. Retry launch (up to 2 times)                            │
+  │ 6. If still fails → Show detailed error                    │
+  └────────────────────────────────────────────────────────────┘
+
+Layer 4: ClickTok.bat (Post-Launch Recovery)
+  ┌────────────────────────────────────────────────────────────┐
+  │ 1. Detect if python main.py failed                         │
+  │ 2. Check if it's a dependency issue                        │
+  │ 3. If YES → Force-reinstall moviepy                        │
+  │ 4. Retry python main.py                                    │
+  │ 5. If still fails → Show manual instructions               │
+  └────────────────────────────────────────────────────────────┘
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  EXAMPLE: SELF-HEALING IN ACTION
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Scenario: User runs ClickTok.bat but moviepy is corrupted
+
+You see:
+  ============================================================
+    ClickTok - TikTok Affiliate Marketing Automation
+  ============================================================
+
+  Starting ClickTok GUI...
+
+  ⚠️  Import Error Detected - Auto-Fixing...
+
+  Error: No module named 'moviepy.editor'
+
+  🔧 Attempting automatic repair...
+  Retry attempt 1/2
+
+  Reinstalling dependencies...
+
+  [Step 1/6] Checking Python version
+  ✓ Python 3.13.0 detected
+
+  [Step 2/6] Installing Python packages
+  → Upgrading pip...
+  ✓ pip upgraded
+
+  → Installing Python packages...
+  ✓ All packages installed successfully
+
+  [Continue with remaining steps...]
+
+  ✅ Repair successful! Restarting ClickTok...
+
+  Starting ClickTok GUI...
+
+  [GUI window opens successfully!]
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  REPAIR STRATEGIES USED
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Strategy 1: Full Setup Reinstall
+  Command: python setup.py
+  When: First attempt
+  Coverage: All packages
+
+Strategy 2: Direct Package Install
+  Command: pip install [packages]
+  When: Setup fails
+  Coverage: Critical packages only
+
+Strategy 3: Force Reinstall
+  Command: pip install --force-reinstall [package]
+  When: Specific package corrupted
+  Coverage: Problem package only
+
+Strategy 4: Individual Install
+  Command: pip install [each package separately]
+  When: Batch install fails
+  Coverage: One by one
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  TECHNICAL IMPLEMENTATION
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+ClickTok.bat additions:
+  • Retry loop for setup.bat
+  • Alternative pip install if setup fails
+  • Post-launch dependency check
+  • Force-reinstall on import errors
+  • Multiple retry attempts
+
+main.py enhancements:
+  • try-except-retry loop (max 2 retries)
+  • Automatic subprocess call to setup.py
+  • Import cache clearing (sys.modules cleanup)
+  • Detailed error detection
+  • Progressive error messages
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  WHAT GETS FIXED AUTOMATICALLY?
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+✅ Missing dependencies
+✅ Corrupted packages
+✅ Incomplete installations
+✅ Import errors from module not found
+✅ Package version conflicts (partial)
+✅ Broken package installations
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  WHAT STILL REQUIRES MANUAL INTERVENTION?
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+❌ Python not installed
+❌ Python version too old (< 3.8)
+❌ No internet connection
+❌ FFmpeg not installed (for video creation)
+❌ Insufficient disk space
+❌ Antivirus blocking pip
+❌ Python 3.13 build failures (some packages)
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  ERROR MESSAGES YOU MIGHT STILL SEE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+If you see these, automatic repair failed:
+
+"Cannot Fix Automatically"
+  → Means: Multiple repair attempts failed
+  → Action: Follow manual steps provided
+
+"Setup Failed After Retry"
+  → Means: Both setup methods failed
+  → Action: Check PYTHON_313_FIX.txt
+
+"Error Persists"
+  → Means: Problem not fixable by reinstalling
+  → Action: Check system configuration
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  BENEFITS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+✅ Extremely user-friendly
+✅ Reduces support requests
+✅ Handles common issues automatically
+✅ Saves time for users
+✅ Professional experience
+✅ Resilient to installation problems
+✅ Multiple fallback strategies
+✅ Clear communication when manual help needed
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  RETRY LOGIC SUMMARY
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Attempt 1: Full setup.py installation
+  ↓ (if fails)
+
+Attempt 2: Direct pip install of critical packages
+  ↓ (if fails)
+
+Attempt 3: Force-reinstall specific problem package
+  ↓ (if fails)
+
+Show Manual Instructions
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  USER EXPERIENCE COMPARISON
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+WITHOUT SELF-HEALING:
+  1. User runs ClickTok
+  2. Error: "No module named 'moviepy.editor'"
+  3. User confused 😕
+  4. User reads docs
+  5. User runs setup.bat
+  6. User runs ClickTok again
+  7. Works!
+
+WITH SELF-HEALING:
+  1. User runs ClickTok
+  2. "Auto-Fixing..." (user waits)
+  3. Works! ✓
+
+
+═══════════════════════════════════════════════════════════════════════
+
+              🎉 CLICKTOK NOW FIXES ITSELF! 🎉
+
+         Most common errors are automatically resolved!
+
+═══════════════════════════════════════════════════════════════════════

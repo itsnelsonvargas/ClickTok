@@ -1,0 +1,274 @@
+╔══════════════════════════════════════════════════════════════════════╗
+║                                                                      ║
+║         ✅ AUTO-REPAIR SYSTEM IMPLEMENTED                            ║
+║                                                                      ║
+╚══════════════════════════════════════════════════════════════════════╝
+
+
+🎉 Your request has been implemented!
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  WHAT YOU REQUESTED
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+"I want it to automatically resolve its issue when it encounters
+problems like this:
+
+  Error: No module named 'moviepy.editor'
+
+  Some dependencies may not be installed correctly.
+
+  Please try:
+    1. Close this window
+    2. Run: setup.bat
+    3. Try again"
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  WHAT I IMPLEMENTED
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+ClickTok now has a MULTI-LAYER SELF-HEALING SYSTEM that automatically
+detects and fixes common problems!
+
+
+🔧 LAYER 1: Pre-Launch Detection (ClickTok.bat)
+  • Checks if dependencies exist before launching
+  • Auto-installs if missing
+  • Retries with alternative method if first attempt fails
+
+🔧 LAYER 2: Pre-Import Check (main.py)
+  • Checks critical packages before importing
+  • Auto-runs setup.py if packages missing
+  • Continues automatically after installation
+
+🔧 LAYER 3: Import Error Handler (main.py)
+  • Catches ImportError during launch
+  • Automatically runs repair (up to 2 retries)
+  • Clears import cache and retries
+  • Only shows error if all attempts fail
+
+🔧 LAYER 4: Post-Launch Recovery (ClickTok.bat)
+  • Detects if launch failed
+  • Checks if it's a dependency issue
+  • Force-reinstalls problematic packages
+  • Retries launch automatically
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  HOW IT WORKS NOW
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+OLD BEHAVIOR:
+  1. Error: "No module named 'moviepy.editor'"
+  2. Please run setup.bat manually
+  3. User has to close and retry
+
+NEW BEHAVIOR:
+  1. Error detected: "No module named 'moviepy.editor'"
+  2. "⚠️  Import Error Detected - Auto-Fixing..."
+  3. "🔧 Attempting automatic repair..."
+  4. "Reinstalling dependencies..."
+  5. [Waits 5-10 minutes for installation]
+  6. "✅ Repair successful! Restarting ClickTok..."
+  7. ClickTok launches automatically!
+
+Result: NO user action needed! 🎉
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  EXAMPLE SCENARIO
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+You run ClickTok.bat, and get the moviepy.editor error.
+
+What happens:
+
+  ============================================================
+    ClickTok - TikTok Affiliate Marketing Automation
+  ============================================================
+
+  Starting ClickTok GUI...
+
+  ⚠️  Import Error Detected - Auto-Fixing...
+  ======================================================================
+
+  Error: No module named 'moviepy.editor'
+
+  🔧 Attempting automatic repair...
+  Retry attempt 1/2
+
+  Reinstalling dependencies...
+
+  [Step 1/6] Checking Python version
+  ✓ Python 3.13.0 detected
+
+  ⚠️  WARNING: Python 3.13 is very new!
+    Some packages may not have pre-built wheels yet.
+
+  [Step 2/6] Installing Python packages
+
+  → Upgrading pip...
+    ✓ pip upgraded
+
+  → Installing Python packages...
+    ✗ Batch installation failed
+
+  ⚠️  Trying individual package installation...
+
+    → Installing requests...
+      ✓ requests installed
+
+    → Installing beautifulsoup4...
+      ✓ beautifulsoup4 installed
+
+    → Installing lxml...
+      ✓ lxml installed
+
+    → Installing Pillow...
+      ✓ Pillow installed
+
+    → Installing moviepy...
+      ✓ moviepy installed
+
+    [... continues for all packages ...]
+
+    ✓ Installed 9/9 critical packages
+
+  [Step 3/6] Installing Playwright browsers
+  → Installing Playwright Chromium browser...
+    ✓ Success
+
+  [Steps 4-6 complete...]
+
+  ✅ Repair successful! Restarting ClickTok...
+
+  [GUI launches automatically!]
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  RETRY LOGIC
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+If error occurs, the system tries multiple repair strategies:
+
+Attempt 1:
+  → Run full setup.py
+  → Installs all packages
+  → If successful → Continue
+
+Attempt 2 (if #1 fails):
+  → Try direct pip install of critical packages
+  → If successful → Continue
+
+Attempt 3 (if #2 fails):
+  → Force-reinstall the specific problem package
+  → If successful → Continue
+
+Final (if all fail):
+  → Show detailed manual instructions
+  → Include links to troubleshooting docs
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  WHAT ERRORS GET AUTO-FIXED?
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+✅ "No module named 'moviepy'"
+✅ "No module named 'moviepy.editor'"
+✅ "No module named 'playwright'"
+✅ "No module named 'PIL'"
+✅ Any other missing package imports
+✅ Corrupted package installations
+✅ Incomplete installations
+✅ Package version conflicts (partial)
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  FILES MODIFIED
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+ClickTok.bat
+  ✓ Added retry loop for setup
+  ✓ Alternative installation methods
+  ✓ Post-launch dependency check
+  ✓ Force-reinstall on persistent errors
+  ✓ Automatic launch retry
+
+main.py
+  ✓ Added try-except-retry loop (max 2 retries)
+  ✓ Automatic setup.py execution on error
+  ✓ Import cache clearing
+  ✓ Progressive error messages
+  ✓ Detailed error detection
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  NEW FILES CREATED
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+SELF_HEALING.txt         - Complete documentation
+AUTO_REPAIR_UPDATE.txt   - This file (summary)
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  WHAT TO DO NOW
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Just run ClickTok.bat!
+
+Even if you get errors, the system will:
+  1. Detect the problem
+  2. Attempt to fix it
+  3. Retry automatically
+  4. Show helpful message if unable to fix
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  TESTING THE AUTO-REPAIR
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+To test:
+
+1. Navigate to ClickTok folder
+2. Double-click ClickTok.bat
+3. If you get an error → Watch it auto-fix!
+4. Wait for repair to complete (5-10 minutes)
+5. ClickTok should launch automatically
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  BENEFITS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+✅ Zero manual intervention for common errors
+✅ Extremely user-friendly
+✅ Professional experience
+✅ Handles Python 3.13 issues automatically
+✅ Multiple fallback strategies
+✅ Clear communication
+✅ Saves time
+✅ Reduces frustration
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  COMPARISON
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+BEFORE:
+  Error → User action required → User fixes → Retry → Works
+
+NOW:
+  Error → Auto-fix → Works ✓
+
+
+═══════════════════════════════════════════════════════════════════════
+
+              ✅ YOUR REQUEST IS COMPLETE! ✅
+
+         ClickTok now automatically fixes common errors!
+
+         Just run it and watch it heal itself! 🔧
+
+═══════════════════════════════════════════════════════════════════════

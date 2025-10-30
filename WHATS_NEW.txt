@@ -1,0 +1,171 @@
+╔══════════════════════════════════════════════════════════════════════╗
+║                                                                      ║
+║                  WHAT'S NEW - AUTO-INSTALL UPDATE                    ║
+║                                                                      ║
+╚══════════════════════════════════════════════════════════════════════╝
+
+
+🎉 MAJOR UPDATE: FULLY AUTOMATIC DEPENDENCY INSTALLATION!
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  WHAT CHANGED?
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+BEFORE:
+  1. User runs ClickTok.bat
+  2. Error: "ModuleNotFoundError: No module named 'moviepy'"
+  3. User confused, doesn't know what to do
+  4. User reads docs to find solution
+  5. User manually runs setup.bat
+  6. User runs ClickTok.bat again
+  7. Finally works!
+
+NOW:
+  1. User runs ClickTok.bat
+  2. Auto-detects missing dependencies
+  3. Automatically installs everything (no user interaction!)
+  4. Launches ClickTok when ready!
+
+Result: ONE CLICK instead of multiple steps! 🚀
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  HOW TO USE NOW
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+First Time Ever:
+  1. Double-click: ClickTok.bat
+  2. Wait 5-10 minutes (automatic installation)
+  3. ClickTok opens automatically!
+  4. Done!
+
+Every Time After:
+  1. Double-click: ClickTok.bat
+  2. Opens in 2 seconds!
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  TECHNICAL IMPROVEMENTS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+1. ✅ Automatic dependency detection
+   - ClickTok.bat checks for moviepy before launching
+   - main.py also checks before importing heavy modules
+
+2. ✅ Zero-interaction installation
+   - No "Press Y to continue" prompts
+   - Just runs automatically
+
+3. ✅ Smart import handling
+   - Imports moved inside functions
+   - Allows post-installation loading
+   - Works after fresh install without restart
+
+4. ✅ Better error messages
+   - Clear explanation if auto-install fails
+   - Helpful next steps provided
+
+5. ✅ Fallback options
+   - If auto-install fails, shows manual instructions
+   - Multiple installation methods still available
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  FILES MODIFIED
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+ClickTok.bat
+  • Added automatic dependency check
+  • Calls setup.bat automatically if needed
+  • No user prompt required
+  • Better error handling
+
+main.py
+  • Added check_dependencies() function
+  • Automatically runs setup.py if dependencies missing
+  • Moved imports into functions for post-install loading
+  • Better error handling with helpful messages
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  NEW FILES CREATED
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+AUTO_INSTALL_INFO.txt    - Details about automatic installation
+README_SIMPLE.txt         - Beginner-friendly guide (updated)
+FIRST_TIME_SETUP.txt      - First-time setup help (updated)
+WHATS_NEW.txt            - This file!
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  WHAT YOU NEED TO DO
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+NOTHING! Just run ClickTok.bat!
+
+The system will handle everything automatically:
+  ✓ Detect missing dependencies
+  ✓ Install them automatically
+  ✓ Launch ClickTok when ready
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  TESTING THE NEW FEATURE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Try it now:
+
+1. Navigate to ClickTok folder
+2. Double-click ClickTok.bat
+3. Watch automatic installation happen
+4. ClickTok launches when done!
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  IF YOU HAVE PYTHON 3.13
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Auto-install will still work, but some packages might fail.
+
+The system will:
+  1. Try to install all packages
+  2. If some fail, install critical ones individually
+  3. Continue with what's available
+  4. Show helpful error if too many fail
+
+See: PYTHON_313_FIX.txt for more info
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  BENEFITS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+✅ Beginner-friendly
+✅ No tech knowledge required
+✅ Professional user experience
+✅ One-click to get started
+✅ Saves time
+✅ Reduces confusion
+✅ Works out of the box
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  BACKWARDS COMPATIBLE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Manual installation still works:
+  • setup.bat still works
+  • setup.py still works
+  • Manual pip install still works
+
+Nothing broken, just better! ✓
+
+
+═══════════════════════════════════════════════════════════════════════
+
+              🎊 CLICKTOK IS NOW EVEN EASIER TO USE! 🎊
+
+         Just double-click ClickTok.bat and you're done!
+
+═══════════════════════════════════════════════════════════════════════

@@ -1,169 +1,185 @@
 ╔══════════════════════════════════════════════════════════════════════╗
 ║                                                                      ║
-║           Python 3.13 Installation Fix Guide                        ║
+║              ClickTok - Launcher Files Explained                     ║
 ║                                                                      ║
 ╚══════════════════════════════════════════════════════════════════════╝
 
 
-🔴 ISSUE: You're using Python 3.13 (released Oct 2024)
-   Some packages don't have pre-built wheels for Python 3.13 yet.
-
-⚠️  IMPORTANT - MOVIEPY VERSION ISSUE
-   If you get: "No module named 'moviepy.editor'"
-   See: MOVIEPY_FIX_COMPLETED.txt for the complete solution!
-
-   Quick fix: Use moviepy 1.x (NOT 2.x)
-   Command: python -m pip install "moviepy>=1.0.3,<2.0.0"
+ClickTok now includes easy-to-use launcher files!
 
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-  SOLUTION 1: Try the Setup Again (RECOMMENDED)
+  📦 LAUNCHER FILES IN YOUR CLICKTOK FOLDER
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-I've updated setup.py with a smart fallback that installs packages
-individually when batch install fails.
+setup.bat
+  → First-time installation
+  → Installs all dependencies
+  → Run this ONCE before first use
+  → Takes 5-10 minutes
 
-Just run again:
-  setup.bat
+ClickTok.bat ⭐ MAIN LAUNCHER
+  → Launches the GUI dashboard
+  → User-friendly graphical interface
+  → Best for daily use
+  → Just double-click to start!
 
-The new setup will:
-  • Try batch installation first
-  • If it fails, install packages one-by-one
-  • Skip problematic packages and continue
-  • Only need 6/9 critical packages to succeed
-
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-  SOLUTION 2: Install Minimal Requirements
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-Install only essential packages:
-
-  python -m pip install -r requirements-minimal.txt
-  python -m playwright install chromium
-
-This installs just the core packages needed to run ClickTok.
+ClickTok-CLI.bat
+  → Launches CLI (text-based) mode
+  → For advanced users or automation
+  → Terminal/command-line interface
 
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-  SOLUTION 3: Manual Step-by-Step Installation
+  🎯 WHICH FILE TO USE?
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-Install packages one at a time:
+First time setup:
+  1. Double-click: setup.bat
+  2. Wait 5-10 minutes for installation
+  3. Done!
 
-1. python -m pip install --upgrade pip
-2. python -m pip install requests beautifulsoup4 lxml
-3. python -m pip install Pillow numpy
-4. python -m pip install "moviepy>=1.0.3,<2.0.0"
-5. python -m pip install imageio imageio-ffmpeg
-6. python -m pip install playwright
-7. python -m playwright install chromium
+Daily use:
+  → Double-click: ClickTok.bat
+  → Work with GUI
+  → Close when done
 
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-  SOLUTION 4: Downgrade to Python 3.11 or 3.12 (BEST COMPATIBILITY)
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-For the smoothest experience:
-
-1. Uninstall Python 3.13
-2. Download Python 3.11 or 3.12 from: https://www.python.org/downloads/
-3. Install with "Add Python to PATH" checked
-4. Run setup.bat again
-
-Python 3.11/3.12 have mature ecosystem support and all packages
-have pre-built wheels available.
+Advanced/Scripting:
+  → Double-click: ClickTok-CLI.bat
+  → Use text commands
+  → Type '6' to exit
 
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-  WHAT'S THE PROBLEM WITH PYTHON 3.13?
+  💡 HOW LAUNCHER FILES WORK
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-Python 3.13 was released in October 2024 - it's very new!
+What ClickTok.bat does:
+  1. Changes to correct directory
+  2. Checks if Python is installed
+  3. Runs: python main.py
+  4. Shows any errors if they occur
+  5. Pauses so you can read error messages
 
-Many packages (like Pillow, opencv, pandas) need to build "wheels"
-(pre-compiled binaries) for each Python version.
-
-Building wheels takes time, so there's a delay between:
-  • Python 3.13 release
-  • Package maintainers building compatible wheels
-
-This is normal! Give it a few months and everything will work smoothly.
-
-For NOW:
-  • Python 3.11 or 3.12 = Perfect compatibility ✓
-  • Python 3.13 = Works but some packages need building ⚠️
+You could also run "python main.py" directly, but the .bat file:
+  ✓ Easier (just double-click!)
+  ✓ Checks for Python
+  ✓ Shows helpful error messages
+  ✓ Works from anywhere
 
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-  QUICKEST FIX RIGHT NOW
+  🖱️ CREATING A DESKTOP SHORTCUT
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-Run these commands in order:
+To add ClickTok to your Desktop:
 
-cd C:\Users\user\Desktop\ClickTok
+1. Find ClickTok.bat in the ClickTok folder
+2. Right-click on ClickTok.bat
+3. Select "Create shortcut"
+4. Drag the shortcut to your Desktop
+5. (Optional) Rename to "ClickTok"
 
-python -m pip install --upgrade pip
-
-python -m pip install requests beautifulsoup4 lxml Pillow numpy "moviepy>=1.0.3,<2.0.0" imageio imageio-ffmpeg playwright python-dotenv
-
-python -m playwright install chromium
-
-python main.py
-
-
-If that works, you're good to go! ✓
-
-IMPORTANT: Notice we install "moviepy>=1.0.3,<2.0.0" (with quotes)
-This ensures you get moviepy 1.x which is compatible with ClickTok.
+Now you can launch ClickTok from your Desktop! 🚀
 
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-  ALTERNATIVE: Use the Updated Setup Script
+  📋 COMPARISON: BAT vs COMMAND LINE
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-I just updated setup.py to handle Python 3.13 better!
+Using ClickTok.bat (Easy):
+  1. Double-click ClickTok.bat
+  2. Done!
 
-Just run:
-  setup.bat
+Using Command Line (Manual):
+  1. Open Command Prompt
+  2. Navigate: cd C:\Users\user\Desktop\ClickTok
+  3. Run: python main.py
+  4. Done!
 
-It will now:
-  ✓ Warn you about Python 3.13
-  ✓ Try batch install
-  ✓ If that fails, install packages individually
-  ✓ Continue even if some packages fail
-  ✓ Work with minimal dependencies
+Result: Same! But .bat file is faster and easier.
 
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-  PACKAGES THAT MIGHT FAIL (NOT CRITICAL)
+  🔧 CUSTOMIZING LAUNCHER FILES
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-These packages are optional and ClickTok will work without them:
+You can edit the .bat files if needed:
+  1. Right-click ClickTok.bat
+  2. Select "Edit"
+  3. Make changes
+  4. Save and close
 
-  • pyttsx3 (text-to-speech - can use gTTS instead)
-  • customtkinter (GUI enhancement - tkinter works fine)
-  • pandas (data analysis - not critical)
-  • pyautogui (automation - not used yet)
-  • openai/anthropic (AI captions - templates work too)
+Example customizations:
+  • Change window title
+  • Add custom startup messages
+  • Set environment variables
+  • Run pre-launch checks
 
-Core packages that MUST work:
-  ✓ requests (HTTP)
-  ✓ beautifulsoup4 (parsing)
-  ✓ Pillow (images)
-  ✓ moviepy (videos)
-  ✓ playwright (TikTok automation)
-  ✓ imageio (video processing)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  ❓ TROUBLESHOOTING
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Problem: Double-clicking does nothing
+  → Right-click → "Run as administrator"
+  → Or check if Python is installed
+
+Problem: "Python is not recognized"
+  → Run setup.bat first to install Python dependencies
+  → Or install Python from python.org
+
+Problem: Window closes immediately
+  → There's an error (window closes too fast to read)
+  → Instead: Open Command Prompt
+  → Navigate to ClickTok folder
+  → Run: ClickTok.bat
+  → Now you can read the error message
+
+Problem: "Cannot find main.py"
+  → Make sure you're running from ClickTok folder
+  → .bat file should be IN the ClickTok folder
+  → Don't move .bat files to Desktop (create shortcut instead)
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  📂 FILE STRUCTURE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+ClickTok/
+  │
+  ├── setup.bat              ← First-time setup
+  ├── ClickTok.bat          ← GUI launcher ⭐
+  ├── ClickTok-CLI.bat      ← CLI launcher
+  │
+  ├── main.py               ← Main Python app
+  ├── requirements.txt      ← Python packages
+  │
+  ├── config/               ← Settings
+  ├── src/                  ← Source code
+  ├── gui/                  ← GUI code
+  ├── data/                 ← Database & videos
+  └── assets/               ← Logo, music, fonts
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  🎯 QUICK START
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+First time:
+  1. Double-click: setup.bat
+  2. Wait for installation
+  3. Double-click: ClickTok.bat
+  4. Start using!
+
+Daily use:
+  → Double-click: ClickTok.bat
+  → Work with ClickTok
+  → Close when done
 
 
 ═══════════════════════════════════════════════════════════════════════
 
-              🎯 RECOMMENDED ACTION NOW
-
-         Run: setup.bat (it's been updated!)
-
-         OR
-
-         Follow "QUICKEST FIX" commands above
+           🚀 JUST DOUBLE-CLICK ClickTok.bat TO START! 🚀
 
 ═══════════════════════════════════════════════════════════════════════
