@@ -1,87 +1,105 @@
 ╔══════════════════════════════════════════════════════════════════════╗
 ║                                                                      ║
-║              ✅ CLICKTOK IS NOW READY TO LAUNCH! ✅                   ║
+║                  ⚡ CLICKTOK - QUICK START ⚡                         ║
 ║                                                                      ║
 ╚══════════════════════════════════════════════════════════════════════╝
 
 
-            🎉 ALL ERRORS RESOLVED + NEW FEATURES! 🎉
+                    Get started in 5 minutes!
 
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-  WHAT WAS FIXED
+  STEP 1: LAUNCH CLICKTOK
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-✅ Fix #1: UnboundLocalError (sys import issue)
-✅ Fix #2: moviepy.editor import error (downgraded to v1.0.3)
-✅ Fix #3: Tuple type hint not imported
-✅ Fix #4: Window closing immediately
-
-All Python 3.13 compatibility issues resolved!
-
-🆕 NEW FEATURE: Settings Tab
-   • User-friendly credential management
-   • Edit TikTok account, API keys through GUI
-   • Password masking for security
-   • Test and save with one click
-   • See: SETTINGS_TAB_INFO.txt for details
+📂 Navigate to ClickTok folder
+🖱️ Double-click: ClickTok.bat
+⏳ Wait for GUI to open (2 seconds)
 
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-  LAUNCH CLICKTOK NOW
+  STEP 2: CONFIGURE SETTINGS (NEW! ⚙️)
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-Double-click: ClickTok.bat
-
-OR
-
-Run: python main.py
-
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-  INSTALLED PACKAGES (WORKING)
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-✓ moviepy 1.0.3 (compatible version)
-✓ Pillow 10.4.0
-✓ imageio 2.37.0
-✓ imageio-ffmpeg 0.6.0
-✓ numpy 2.2.6
-✓ decorator 4.4.2
-✓ All other dependencies
+1. Click "⚙️ Settings" tab
+2. Enter TikTok username
+3. Enter TikTok password
+4. (Optional) Add API keys
+5. Click "💾 Save Settings"
+6. Done!
 
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-  VERIFICATION
+  STEP 3: START USING CLICKTOK
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-All import tests PASSED:
-  ✅ moviepy.editor
-  ✅ src.tiktok_uploader
-  ✅ src.caption_generator
-  ✅ src.video_creator
-  ✅ src.product_fetcher
-  ✅ src.database
-  ✅ gui.dashboard
-  ✅ python main.py --help
+📱 Products Tab:
+   • Fetch trending products
+   • Select products you like
+   • Mark for video creation
+
+🎬 Videos Tab:
+   • Create product videos
+   • Preview videos
+   • Edit if needed
+
+📤 Posting Tab:
+   • Upload to TikTok
+   • Review before posting
+   • Track performance
 
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-  DOCUMENTATION
+  TABS OVERVIEW
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-📄 ALL_FIXES_SUMMARY.txt - Complete details of all fixes
-📄 MOVIEPY_FIX_COMPLETED.txt - Moviepy version details
-📄 TYPING_IMPORT_FIX.txt - Type hint fix
-📄 PYTHON_313_FIX.txt - Python 3.13 compatibility
-📄 START_HERE.txt - Getting started guide
-📄 README.md - Complete manual
+[Dashboard]  - Overview, statistics, quick actions
+[Products]   - Browse and select products
+[Videos]     - Create and manage videos
+[Posting]    - Upload to TikTok
+[⚙️ Settings] - Configure credentials (NEW!)
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  MINIMUM REQUIREMENTS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+To start using ClickTok:
+   ✅ TikTok username
+   ✅ TikTok password
+
+That's it! Everything else is optional.
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  OPTIONAL ENHANCEMENTS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+TikTok Shop API → Real trending products
+OpenAI API → AI-generated captions
+FFmpeg → Video creation
+Playwright → Automated posting
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  HELP & DOCUMENTATION
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📖 Quick Guides:
+   • LATEST_UPDATE.txt - What's new
+   • SETTINGS_TAB_GUIDE.txt - Settings tab usage
+   • START_HERE.txt - Getting started
+
+📚 Complete Documentation:
+   • README.md - Full manual
+   • INSTALL.md - Installation help
+   • PYTHON_313_FIX.txt - Python 3.13 issues
 
 
 ═══════════════════════════════════════════════════════════════════════
 
-              🚀 READY TO LAUNCH - GO AHEAD! 🚀
+                    ✅ READY TO START!
 
-                  Double-click ClickTok.bat
+              Double-click ClickTok.bat now!
 
 ═══════════════════════════════════════════════════════════════════════

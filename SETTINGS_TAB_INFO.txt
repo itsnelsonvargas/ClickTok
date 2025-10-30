@@ -1,0 +1,263 @@
+╔══════════════════════════════════════════════════════════════════════╗
+║                                                                      ║
+║              ⚙️ NEW FEATURE: SETTINGS TAB ADDED! ⚙️                  ║
+║                                                                      ║
+╚══════════════════════════════════════════════════════════════════════╝
+
+
+🎉 ClickTok now has a user-friendly Settings tab!
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  WHAT'S NEW?
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+✅ Easy credential management through GUI
+✅ No more manual JSON editing!
+✅ Password fields are masked for security
+✅ Test credentials without saving
+✅ Instant save and reload functionality
+✅ Clear status messages
+✅ Organized sections with tooltips
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  HOW TO ACCESS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+1. Launch ClickTok: Double-click ClickTok.bat
+2. Click the "⚙️ Settings" tab at the top
+3. Edit your credentials
+4. Click "💾 Save Settings"
+5. Done!
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  SETTINGS SECTIONS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📱 SECTION 1: TikTok Account
+   ┌─────────────────────────────────────────────────────────────────┐
+   │ ✓ Username                                                      │
+   │ ✓ Password (masked with *)                                      │
+   │ ✓ Cookies File path                                             │
+   │                                                                  │
+   │ Purpose: Your TikTok account for posting videos                 │
+   └─────────────────────────────────────────────────────────────────┘
+
+🛍️ SECTION 2: TikTok Shop API (Optional)
+   ┌─────────────────────────────────────────────────────────────────┐
+   │ ✓ App Key                                                       │
+   │ ✓ App Secret (masked with *)                                    │
+   │ ✓ Access Token (masked with *)                                  │
+   │                                                                  │
+   │ Purpose: Fetch real TikTok Shop products                        │
+   │ Note: Leave empty to use demo mode                              │
+   └─────────────────────────────────────────────────────────────────┘
+
+🤖 SECTION 3: AI API Keys (Optional)
+   ┌─────────────────────────────────────────────────────────────────┐
+   │ ✓ OpenAI API Key (masked with *)                                │
+   │ ✓ Anthropic API Key (masked with *)                             │
+   │ ✓ ElevenLabs API Key (masked with *)                            │
+   │                                                                  │
+   │ Purpose: AI-generated captions and voiceovers                   │
+   │ Note: Leave empty to use templates                              │
+   └─────────────────────────────────────────────────────────────────┘
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  AVAILABLE BUTTONS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+💾 SAVE SETTINGS
+   • Saves all credentials to config/credentials.json
+   • Automatically updates all components with new credentials
+   • Shows success/error message
+   • Validates and formats JSON properly
+
+🔄 RELOAD
+   • Reloads credentials from file
+   • Useful if you manually edited the file
+   • Refreshes all input fields
+   • Discards unsaved changes
+
+📝 TEST CONNECTION
+   • Tests if credentials are configured
+   • Checks each API key/credential
+   • Shows status for each service
+   • Doesn't actually connect (basic validation only)
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  FEATURES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+✅ Password Masking
+   • Password fields show *** instead of actual text
+   • Protects sensitive information
+   • API keys are also masked
+
+✅ Auto-Load on Startup
+   • Current credentials automatically load when you open the tab
+   • No need to reload manually
+
+✅ Live Status Updates
+   • Status label shows:
+     - "✅ Settings loaded" (green) - Successfully loaded
+     - "✅ Settings saved successfully!" (green) - Saved
+     - "🔄 Testing credentials..." (blue) - Testing in progress
+     - "❌ Error: ..." (red) - Something went wrong
+
+✅ Scrollable Interface
+   • All fields are accessible even on small screens
+   • Smooth scrolling with mouse wheel
+
+✅ Organized Layout
+   • Grouped by purpose (TikTok, Shop API, AI)
+   • Clear labels and helpful tooltips
+   • Professional appearance
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  EXAMPLE USAGE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+SCENARIO 1: First-Time Setup
+  1. Launch ClickTok
+  2. Go to "⚙️ Settings" tab
+  3. Enter your TikTok username and password
+  4. (Optional) Add API keys for AI features
+  5. Click "💾 Save Settings"
+  6. Start using ClickTok!
+
+SCENARIO 2: Update OpenAI Key
+  1. Open Settings tab
+  2. Paste your new OpenAI API key
+  3. Click "💾 Save Settings"
+  4. Done! AI captions now available
+
+SCENARIO 3: Test Your Setup
+  1. Open Settings tab
+  2. Click "📝 Test Connection"
+  3. Review which credentials are configured
+  4. Add missing ones if needed
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  SECURITY NOTES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🔒 Password Protection:
+   • Passwords and API keys are masked in the UI
+   • Stored in config/credentials.json (local file)
+   • Not sent anywhere except to respective services
+   • Keep credentials.json private!
+
+⚠️ Important:
+   • Do NOT share your credentials.json file
+   • Do NOT commit it to version control
+   • Use strong, unique passwords
+   • Regenerate API keys if compromised
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  WHAT HAPPENS WHEN YOU SAVE?
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+1. Credentials are validated (format check)
+2. Saved to config/credentials.json with proper JSON formatting
+3. All ClickTok components are reloaded with new credentials:
+   • ProductFetcher (for TikTok Shop API)
+   • CaptionGenerator (for AI APIs)
+   • TikTokUploader (for TikTok account)
+4. Success message displayed
+5. Ready to use immediately - no restart needed!
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  TROUBLESHOOTING
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+❌ "Error saving: Permission denied"
+   → Close any programs that might have credentials.json open
+   → Make sure you have write permissions to the config folder
+
+❌ "Error loading: File not found"
+   → The credentials.json file might be missing
+   → Click "💾 Save Settings" to create it
+
+❌ Settings don't take effect
+   → Make sure you clicked "💾 Save Settings" (not just close)
+   → Check status message shows "Settings saved successfully"
+
+❌ Can't see all fields
+   → Use mouse wheel to scroll
+   → The tab is scrollable
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  TECHNICAL DETAILS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+File Modified: gui/dashboard.py
+
+New Methods Added:
+  • create_settings_tab() - Creates the Settings UI
+  • _create_entry() - Helper to create input fields
+  • load_credentials_to_ui() - Loads credentials from JSON to UI
+  • save_credentials() - Saves UI values to JSON file
+  • test_credentials() - Tests credential validity
+
+Storage Location:
+  config/credentials.json
+
+UI Components:
+  • ttk.Notebook tab
+  • Scrollable Canvas + Frame
+  • ttk.Entry widgets (50 chars wide)
+  • ttk.Button widgets
+  • tk.Label for status messages
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  BENEFITS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+✅ User-friendly - No JSON knowledge required
+✅ Time-saving - Edit credentials in seconds
+✅ Secure - Password masking for sensitive data
+✅ Professional - Clean, organized interface
+✅ Reliable - Proper error handling and validation
+✅ Convenient - No need to restart ClickTok
+✅ Flexible - Test before saving
+✅ Accessible - Works on all screen sizes (scrollable)
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  COMPARISON
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+BEFORE (Manual Editing):
+  1. Close ClickTok
+  2. Navigate to config folder
+  3. Open credentials.json in text editor
+  4. Edit JSON carefully (no syntax errors!)
+  5. Save file
+  6. Restart ClickTok
+  7. Hope it works
+
+NOW (Settings Tab):
+  1. Click "⚙️ Settings" tab
+  2. Edit credentials in form
+  3. Click "💾 Save Settings"
+  4. Done! ✓
+
+
+═══════════════════════════════════════════════════════════════════════
+
+              ⚙️ SETTINGS TAB IS NOW AVAILABLE! ⚙️
+
+                  Try it out in ClickTok GUI!
+
+═══════════════════════════════════════════════════════════════════════
