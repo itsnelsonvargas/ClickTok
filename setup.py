@@ -112,7 +112,18 @@ def install_pip_packages():
             "playwright",
             "imageio",
             "imageio-ffmpeg",
-            "numpy"
+            "numpy",
+            "decorator",
+            "proglog",
+            "python-dotenv",
+            "tqdm"
+        ]
+        
+        # Optional packages (install but don't fail if they fail)
+        optional_packages = [
+            "openai",
+            "groq",
+            "anthropic"
         ]
 
         success_count = 0
@@ -132,6 +143,21 @@ def install_pip_packages():
 
         if success_count >= 6:  # At least 6 critical packages
             print(f"\n  ✓ Installed {success_count}/{len(critical_packages)} critical packages")
+            
+            # Try to install optional packages (don't fail if they fail)
+            print("\n  → Installing optional packages (AI APIs)...")
+            for package in optional_packages:
+                try:
+                    subprocess.run(
+                        [sys.executable, "-m", "pip", "install", package],
+                        check=True,
+                        capture_output=True,
+                        timeout=60
+                    )
+                    print(f"    ✓ {package} installed")
+                except:
+                    print(f"    ⚠️  {package} skipped (optional)")
+            
             return True
         else:
             print(f"\n  ✗ Only {success_count}/{len(critical_packages)} packages installed")
@@ -268,7 +294,12 @@ def print_next_steps():
     print("   - Add music files to: assets/music/*.mp3")
     print("   - See assets/README.txt for details\n")
 
-    print("3. Run ClickTok:")
+    print("3. Configure credentials:")
+    print("   - Copy env.example to .env")
+    print("   - Edit .env with your API keys")
+    print("   - Or use GUI Settings tab after first launch\n")
+    
+    print("4. Run ClickTok:")
     print("   - GUI Mode:  python main.py")
     print("   - CLI Mode:  python main.py --cli")
     print("   - Examples:  python example_usage.py\n")

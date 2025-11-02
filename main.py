@@ -30,6 +30,13 @@ def check_dependencies():
         ('requests', 'requests'),
         ('bs4', 'beautifulsoup4'),
     ]
+    
+    # Optional packages (check but don't fail if missing)
+    optional_packages = [
+        ('openai', 'openai'),
+        ('groq', 'groq'),
+        ('anthropic', 'anthropic'),
+    ]
 
     for module_name, package_name in required_packages:
         try:
@@ -123,7 +130,23 @@ def launch_cli():
     print("=" * 60)
 
     # Load credentials
-    with open(settings.BASE_DIR / "config" / "credentials.json") as f:
+    cred_file = settings.BASE_DIR / "config" / "credentials.json"
+    if not cred_file.exists():
+        print("\n⚠️  Warning: credentials.json not found!")
+        print("   Creating default credentials file from template...")
+        example_file = settings.BASE_DIR / "config" / "credentials.json.example"
+        if example_file.exists():
+            import shutil
+            shutil.copy(example_file, cred_file)
+            print("   ✓ Created credentials.json from template")
+            print("   Please edit config/credentials.json with your credentials\n")
+        else:
+            print("   ⚠️  Template not found. Creating empty credentials file...")
+            cred_file.parent.mkdir(parents=True, exist_ok=True)
+            with open(cred_file, 'w') as f:
+                json.dump({}, f, indent=2)
+    
+    with open(cred_file) as f:
         credentials = json.load(f)
 
     db = Database(settings.DATABASE_PATH)

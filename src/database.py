@@ -154,6 +154,19 @@ class Database:
         cursor = conn.cursor()
         cursor.execute("UPDATE products SET status = ? WHERE product_id = ?", (status, product_id))
         conn.commit()
+    
+    def delete_product(self, product_id: str) -> bool:
+        """Delete a product from the database"""
+        conn = self.connect()
+        cursor = conn.cursor()
+        try:
+            cursor.execute("DELETE FROM products WHERE product_id = ?", (product_id,))
+            conn.commit()
+            logger.info(f"Deleted product: {product_id}")
+            return cursor.rowcount > 0
+        except Exception as e:
+            logger.error(f"Error deleting product {product_id}: {e}")
+            return False
 
     def add_video(self, video_data: Dict) -> int:
         """Add a generated video to the database"""

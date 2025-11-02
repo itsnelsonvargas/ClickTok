@@ -48,19 +48,37 @@ TIKTOK_CONFIG = {
     "headless": False,  # Set True to hide browser
 }
 
-# Product Selection Criteria
+# Product Selection Criteria - OPTIMIZED FOR PHILIPPINES MARKET
+# Target: PHP 10,000/month revenue
 PRODUCT_FILTERS = {
-    "min_commission_rate": 5,  # minimum percentage
-    "min_price": 5,  # USD
-    "max_price": 500,  # USD
-    "min_rating": 4.0,
-    "categories": ["Electronics", "Beauty", "Fashion", "Home", "Fitness"]
+    "min_commission_rate": 8,  # minimum percentage (increased for profitability)
+    "min_price": 2,  # USD (PHP ~112) - affordable for PH market
+    "max_price": 30,  # USD (PHP ~1,680) - maximum affordable price in PH
+    "min_rating": 4.0,  # Maintain quality standards
+    "categories": [
+        "Beauty", "Skincare", "Fashion", "Accessories", 
+        "Home", "Lifestyle", "Electronics", "Fitness"
+    ],
+    "priority_categories": ["Beauty", "Skincare", "Fashion"],  # Focus 60% here
 }
 
-# Hashtag Strategy
+# Hashtag Strategy - PHILIPPINES OPTIMIZED
 HASHTAG_CONFIG = {
-    "base_tags": ["#TikTokShop", "#TikTokAffiliate", "#FoundItOnTikTok"],
-    "max_hashtags_per_post": 5,
+    "base_tags": [
+        "#TikTokShopPH", 
+        "#TikTokAffiliatePH", 
+        "#FoundItOnTikTokPH",
+        "#ShopOnTikTokPH"
+    ],
+    "category_tags": {
+        "Beauty": ["#BeautyTokPH", "#SkincarePH", "#MakeupPH", "#AffordableBeautyPH"],
+        "Fashion": ["#FashionPH", "#OOTDPH", "#FashionTokPH", "#BudgetFashionPH"],
+        "Home": ["#HomeDecorPH", "#HomeTokPH", "#RoomDecorPH"],
+        "Electronics": ["#TechPH", "#GadgetsPH"],
+        "Fitness": ["#FitnessPH", "#HealthTokPH"]
+    },
+    "trending_tags": ["#SulitFind", "#MustHavePH", "#AffordablePH"],
+    "max_hashtags_per_post": 10,  # Optimal for PH (7-10 is best)
     "trending_check": True
 }
 
@@ -72,12 +90,18 @@ AI_CONFIG = {
     "max_tokens": 150
 }
 
-# Automation Safety
+# Automation Safety - OPTIMIZED FOR 3 HOURS/DAY COMMITMENT
 SAFETY_CONFIG = {
-    "min_delay_between_posts": 3600,  # 1 hour in seconds
-    "max_posts_per_day": 10,
+    "min_delay_between_posts": 3600,  # 1 hour minimum (can randomize 1-3 hours)
+    "max_posts_per_day": 5,  # Optimal for 3hrs/day (3-5 posts recommended)
+    "optimal_posting_times_pht": [  # Philippines Time (PHT)
+        "18:00", "19:00", "20:00", "21:00",  # Evenings (best)
+        "12:00", "13:00",  # Lunch (good)
+        "10:00", "11:00"  # Weekend mornings (good)
+    ],
     "randomize_timing": True,
-    "human_behavior_simulation": True
+    "human_behavior_simulation": True,
+    "timezone": "Asia/Manila"  # Philippines Timezone
 }
 
 # Logging

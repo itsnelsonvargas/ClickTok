@@ -4,6 +4,9 @@
 config/credentials.json
 *.env
 .env
+.env.local
+.env.*.local
+env.example.backup
 
 # Database
 data/products.db

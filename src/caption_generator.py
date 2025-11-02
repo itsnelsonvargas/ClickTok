@@ -31,12 +31,15 @@ class CaptionGenerator:
             try:
                 import openai
                 api_key = self.credentials.get('openai_api_key')
-                if api_key and api_key != 'YOUR_OPENAI_API_KEY_HERE':
-                    openai.api_key = api_key
+                if api_key and api_key != 'YOUR_OPENAI_API_KEY_HERE' and api_key.strip():
+                    # Use modern OpenAI SDK (v1.0+)
+                    client = openai.OpenAI(api_key=api_key.strip())
                     logger.info("OpenAI client initialized")
-                    return openai
+                    return client
             except ImportError:
                 logger.warning("OpenAI package not installed")
+            except Exception as e:
+                logger.error(f"Error initializing OpenAI client: {e}")
 
         elif provider == 'anthropic':
             try:
@@ -85,7 +88,8 @@ Caption:
             provider = self.ai_config.get('provider')
 
             if provider == 'openai':
-                response = self.ai_client.ChatCompletion.create(
+                # Use modern OpenAI SDK (v1.0+)
+                response = self.ai_client.chat.completions.create(
                     model=self.ai_config.get('model', 'gpt-3.5-turbo'),
                     messages=[
                         {"role": "system", "content": "You are a TikTok marketing expert who creates viral captions."},
