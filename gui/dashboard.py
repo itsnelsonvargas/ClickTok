@@ -104,6 +104,24 @@ class ClickTokDashboard:
                         creds['groq_api_key'] = key_value
                         logger.info(f"Loaded Groq API key from .env (length: {len(key_value)})")
                 
+                if 'APIFY_API_KEY' in env_vars:
+                    key_value = env_vars['APIFY_API_KEY'].strip()
+                    if key_value:
+                        creds['apify_api_key'] = key_value
+                        logger.info(f"Loaded Apify API key from .env (length: {len(key_value)})")
+                
+                if 'APIFY_USER_ID' in env_vars:
+                    key_value = env_vars['APIFY_USER_ID'].strip()
+                    if key_value:
+                        creds['apify_user_id'] = key_value
+                        logger.info(f"Loaded Apify User ID from .env")
+                
+                if 'APIFY_ACTOR_ID' in env_vars:
+                    key_value = env_vars['APIFY_ACTOR_ID'].strip()
+                    if key_value:
+                        creds['apify_actor_id'] = key_value
+                        logger.info(f"Loaded Apify Actor ID from .env")
+                
                 if 'ELEVENLABS_API_KEY' in env_vars:
                     creds['elevenlabs_api_key'] = env_vars['ELEVENLABS_API_KEY']
                 
@@ -353,7 +371,7 @@ class ClickTokDashboard:
         tk.Label(left_frame, text="AI Provider:", font=('Arial', 10, 'bold')).grid(row=0, column=0, sticky='w', pady=5)
         self.script_provider_var = tk.StringVar(value="openai")
         provider_combo = ttk.Combobox(left_frame, textvariable=self.script_provider_var,
-                                      values=["openai", "groq"],
+                                      values=["openai", "groq", "apify"],
                                       width=40, state='readonly')
         provider_combo.grid(row=0, column=1, sticky='ew', padx=5, pady=5)
         provider_combo.bind('<<ComboboxSelected>>', lambda e: self._update_provider_status())
@@ -1276,7 +1294,7 @@ Image URL: {product.get('image_url', 'N/A')}
         self._create_api_entry(shop_frame, "Access Token:", "tiktok_shop_api.access_token", 2, api_name="TikTok Shop")
 
         tk.Label(shop_frame, text="ℹ️ Required for fetching real TikTok Shop products. Leave empty to use demo mode.",
-                fg='gray', font=('Arial', 8)).grid(row=3, column=0, columnspan=4, pady=(5,0), sticky='w')
+                fg='gray', font=('Arial', 8)).grid(row=3, column=0, columnspan=2, pady=(10,0), sticky='w')
 
         # AI API Keys Section
         ai_frame = ttk.LabelFrame(scrollable_frame, text="🤖 AI API Keys (Optional)", padding=20)
@@ -1285,10 +1303,25 @@ Image URL: {product.get('image_url', 'N/A')}
         self._create_api_entry(ai_frame, "OpenAI API Key:", "openai_api_key", 0, api_name="OpenAI")
         self._create_api_entry(ai_frame, "Anthropic API Key:", "anthropic_api_key", 1, api_name="Anthropic")
         self._create_api_entry(ai_frame, "Groq API Key:", "groq_api_key", 2, api_name="Groq")
-        self._create_api_entry(ai_frame, "ElevenLabs API Key:", "elevenlabs_api_key", 3, api_name="ElevenLabs")
+        self._create_api_entry(ai_frame, "Apify API Key:", "apify_api_key", 3, api_name="Apify")
+        self._create_api_entry(ai_frame, "ElevenLabs API Key:", "elevenlabs_api_key", 4, api_name="ElevenLabs")
+        
+        # Apify Actor ID configuration
+        tk.Label(ai_frame, text="Apify Actor ID:", font=('Arial', 10)).grid(row=5, column=0,
+                                                                    sticky='w', pady=8, padx=(0, 10))
+        apify_actor_frame = tk.Frame(ai_frame)
+        apify_actor_frame.grid(row=5, column=1, sticky='ew', pady=8)
+        apify_actor_frame.columnconfigure(0, weight=1)
+        
+        apify_actor_entry = ttk.Entry(apify_actor_frame, width=35)
+        apify_actor_entry.grid(row=0, column=0, sticky='ew')
+        self.cred_entries['apify_actor_id'] = apify_actor_entry
+        
+        tk.Label(ai_frame, text="ℹ️ Format: username~actorName or actor ID (e.g., apify~web-scraper). Leave empty to use OpenAI directly.",
+                fg='gray', font=('Arial', 8)).grid(row=6, column=0, columnspan=2, pady=(0,10), sticky='w')
 
         tk.Label(ai_frame, text="ℹ️ For AI-generated captions and voiceovers. Leave empty to use templates.",
-                fg='gray', font=('Arial', 8)).grid(row=3, column=0, columnspan=4, pady=(5,0), sticky='w')
+                fg='gray', font=('Arial', 8)).grid(row=7, column=0, columnspan=2, pady=(10,0), sticky='w')
 
         # .env File Section
         env_frame = ttk.LabelFrame(scrollable_frame, text="📄 Environment Variables (.env)", padding=20)
@@ -1503,6 +1536,18 @@ Image URL: {product.get('image_url', 'N/A')}
                 if 'ANTHROPIC_API_KEY' in env_vars:
                     creds['anthropic_api_key'] = env_vars['ANTHROPIC_API_KEY']
                 
+                if 'GROQ_API_KEY' in env_vars:
+                    creds['groq_api_key'] = env_vars['GROQ_API_KEY']
+                
+                if 'APIFY_API_KEY' in env_vars:
+                    creds['apify_api_key'] = env_vars['APIFY_API_KEY']
+                
+                if 'APIFY_USER_ID' in env_vars:
+                    creds['apify_user_id'] = env_vars['APIFY_USER_ID']
+                
+                if 'APIFY_ACTOR_ID' in env_vars:
+                    creds['apify_actor_id'] = env_vars['APIFY_ACTOR_ID']
+                
                 if 'ELEVENLABS_API_KEY' in env_vars:
                     creds['elevenlabs_api_key'] = env_vars['ELEVENLABS_API_KEY']
                 
@@ -1514,8 +1559,21 @@ Image URL: {product.get('image_url', 'N/A')}
                     }
                 
                 logger.info("Loaded credentials from .env file")
+                
+                # Merge with credentials.json if it exists (for any missing keys)
+                if cred_file.exists():
+                    try:
+                        with open(cred_file, 'r') as f:
+                            json_creds = json.load(f)
+                            # Merge: .env takes priority, but fill in missing keys from json
+                            for key, value in json_creds.items():
+                                if key not in creds:
+                                    creds[key] = value
+                            logger.info("Merged credentials from .env and credentials.json")
+                    except Exception as e:
+                        logger.warning(f"Could not merge credentials.json: {e}")
             
-            # Fall back to credentials.json if .env doesn't exist or doesn't have all data
+            # Fall back to credentials.json if .env doesn't exist
             elif cred_file.exists():
                 with open(cred_file, 'r') as f:
                     creds = json.load(f)
@@ -1566,6 +1624,13 @@ Image URL: {product.get('image_url', 'N/A')}
             self.cred_entries['groq_api_key'].delete(0, tk.END)
             self.cred_entries['groq_api_key'].insert(0, creds.get('groq_api_key', ''))
 
+            self.cred_entries['apify_api_key'].delete(0, tk.END)
+            self.cred_entries['apify_api_key'].insert(0, creds.get('apify_api_key', ''))
+            
+            if 'apify_actor_id' in self.cred_entries:
+                self.cred_entries['apify_actor_id'].delete(0, tk.END)
+                self.cred_entries['apify_actor_id'].insert(0, creds.get('apify_actor_id', ''))
+
             self.cred_entries['elevenlabs_api_key'].delete(0, tk.END)
             self.cred_entries['elevenlabs_api_key'].insert(0, creds.get('elevenlabs_api_key', ''))
 
@@ -1577,6 +1642,10 @@ Image URL: {product.get('image_url', 'N/A')}
                         json.dump(creds, f, indent=2)
                 except:
                     pass  # Non-critical
+                
+                # Update self.credentials to include apify_user_id if present
+                if 'apify_user_id' in creds:
+                    self.credentials['apify_user_id'] = creds['apify_user_id']
             
             self.settings_status.config(text="✅ Settings loaded", fg='green')
         except Exception as e:
@@ -1595,6 +1664,9 @@ Image URL: {product.get('image_url', 'N/A')}
                 "openai_api_key": self.cred_entries['openai_api_key'].get(),
                 "anthropic_api_key": self.cred_entries['anthropic_api_key'].get(),
                 "groq_api_key": self.cred_entries['groq_api_key'].get(),
+                "apify_api_key": self.cred_entries['apify_api_key'].get(),
+                "apify_actor_id": self.cred_entries['apify_actor_id'].get() if 'apify_actor_id' in self.cred_entries else '',
+                "apify_user_id": self.credentials.get('apify_user_id', ''),  # Load from existing credentials
                 "elevenlabs_api_key": self.cred_entries['elevenlabs_api_key'].get(),
                 "tiktok_shop_api": {
                     "app_key": self.cred_entries['tiktok_shop_api.app_key'].get(),
@@ -1647,6 +1719,10 @@ Image URL: {product.get('image_url', 'N/A')}
                         status, message = self._test_openai(api_key)
                     elif key == 'anthropic_api_key':
                         status, message = self._test_anthropic(api_key)
+                    elif key == 'groq_api_key':
+                        status, message = self._test_groq(api_key)
+                    elif key == 'apify_api_key':
+                        status, message = self._test_apify(api_key)
                     elif key == 'elevenlabs_api_key':
                         status, message = self._test_elevenlabs(api_key)
                     elif key in ['tiktok_shop_api.app_key', 'tiktok_shop_api.app_secret', 'tiktok_shop_api.access_token']:
@@ -1700,6 +1776,34 @@ Image URL: {product.get('image_url', 'N/A')}
             return 'working', "Anthropic: ✅ Working"
         except Exception as e:
             return 'error', f"Anthropic: ❌ {str(e)[:50]}"
+    
+    def _test_groq(self, api_key):
+        """Test Groq API"""
+        try:
+            from groq import Groq
+            client = Groq(api_key=api_key)
+            # Simple test - list models
+            client.models.list()
+            return 'working', "Groq: ✅ Working"
+        except ImportError:
+            return 'error', "Groq: ❌ Package not installed (pip install groq)"
+        except Exception as e:
+            return 'error', f"Groq: ❌ {str(e)[:50]}"
+    
+    def _test_apify(self, api_key):
+        """Test Apify API"""
+        try:
+            from apify_client import ApifyClient
+            client = ApifyClient(api_key)
+            # Simple test - get user info
+            user = client.user().get()
+            if user and 'data' in user:
+                return 'working', "Apify: ✅ Working"
+            return 'error', "Apify: ❌ Invalid response"
+        except ImportError:
+            return 'error', "Apify: ❌ Package not installed (pip install apify-client)"
+        except Exception as e:
+            return 'error', f"Apify: ❌ {str(e)[:50]}"
     
     def _test_elevenlabs(self, api_key):
         """Test ElevenLabs API"""
@@ -1767,6 +1871,24 @@ Image URL: {product.get('image_url', 'N/A')}
                 results.append(msg)
             else:
                 self.root.after(0, lambda: self._update_status_indicator('anthropic_api_key', 'unknown'))
+            
+            # Test Groq
+            groq_key = self.cred_entries['groq_api_key'].get().strip()
+            if groq_key and not groq_key.startswith("YOUR_"):
+                status, msg = self._test_groq(groq_key)
+                self.root.after(0, lambda: self._update_status_indicator('groq_api_key', status))
+                results.append(msg)
+            else:
+                self.root.after(0, lambda: self._update_status_indicator('groq_api_key', 'unknown'))
+            
+            # Test Apify
+            apify_key = self.cred_entries['apify_api_key'].get().strip()
+            if apify_key and not apify_key.startswith("YOUR_"):
+                status, msg = self._test_apify(apify_key)
+                self.root.after(0, lambda: self._update_status_indicator('apify_api_key', status))
+                results.append(msg)
+            else:
+                self.root.after(0, lambda: self._update_status_indicator('apify_api_key', 'unknown'))
             
             # Test ElevenLabs
             elevenlabs_key = self.cred_entries['elevenlabs_api_key'].get().strip()
@@ -2189,6 +2311,9 @@ Image URL: {product.get('image_url', 'N/A')}
             openai_key = self.cred_entries['openai_api_key'].get().strip()
             anthropic_key = self.cred_entries['anthropic_api_key'].get().strip()
             groq_key = self.cred_entries['groq_api_key'].get().strip()
+            apify_key = self.cred_entries['apify_api_key'].get().strip()
+            apify_actor_id = self.cred_entries['apify_actor_id'].get().strip() if 'apify_actor_id' in self.cred_entries else ''
+            apify_user_id = self.credentials.get('apify_user_id', '').strip() if self.credentials else ''
             elevenlabs_key = self.cred_entries['elevenlabs_api_key'].get().strip()
             
             if openai_key:
@@ -2197,6 +2322,12 @@ Image URL: {product.get('image_url', 'N/A')}
                 lines.append(f"ANTHROPIC_API_KEY={anthropic_key}")
             if groq_key:
                 lines.append(f"GROQ_API_KEY={groq_key}")
+            if apify_key:
+                lines.append(f"APIFY_API_KEY={apify_key}")
+            if apify_user_id:
+                lines.append(f"APIFY_USER_ID={apify_user_id}")
+            if apify_actor_id:
+                lines.append(f"APIFY_ACTOR_ID={apify_actor_id}")
             if elevenlabs_key:
                 lines.append(f"ELEVENLABS_API_KEY={elevenlabs_key}")
             
@@ -2249,6 +2380,22 @@ Image URL: {product.get('image_url', 'N/A')}
             if 'GROQ_API_KEY' in os.environ:
                 self.cred_entries['groq_api_key'].delete(0, tk.END)
                 self.cred_entries['groq_api_key'].insert(0, os.environ['GROQ_API_KEY'])
+            
+            if 'APIFY_API_KEY' in os.environ:
+                self.cred_entries['apify_api_key'].delete(0, tk.END)
+                self.cred_entries['apify_api_key'].insert(0, os.environ['APIFY_API_KEY'])
+            
+            if 'APIFY_USER_ID' in os.environ:
+                # Store in credentials since there's no GUI field for it
+                if 'apify_user_id' not in self.credentials:
+                    self.credentials['apify_user_id'] = os.environ['APIFY_USER_ID']
+                else:
+                    self.credentials['apify_user_id'] = os.environ['APIFY_USER_ID']
+            
+            if 'APIFY_ACTOR_ID' in os.environ:
+                if 'apify_actor_id' in self.cred_entries:
+                    self.cred_entries['apify_actor_id'].delete(0, tk.END)
+                    self.cred_entries['apify_actor_id'].insert(0, os.environ['APIFY_ACTOR_ID'])
             
             if 'ELEVENLABS_API_KEY' in os.environ:
                 self.cred_entries['elevenlabs_api_key'].delete(0, tk.END)
@@ -2797,11 +2944,13 @@ Image URL: {product.get('image_url', 'N/A')}
         provider = self.script_provider_var.get()
         if provider == "groq":
             self.api_status_label.config(text="Provider: Groq AI", fg='blue')
+        elif provider == "apify":
+            self.api_status_label.config(text="Provider: Apify", fg='blue')
         else:
             self.api_status_label.config(text="Provider: OpenAI", fg='blue')
     
     def generate_script(self):
-        """Generate video script using selected AI provider (OpenAI or Groq)"""
+        """Generate video script using selected AI provider (OpenAI, Groq, or Apify)"""
         # Get selected product
         selected_product = self.script_product_var.get()
         if not selected_product:
@@ -2824,7 +2973,7 @@ Image URL: {product.get('image_url', 'N/A')}
         
         # Get selected provider
         provider = self.script_provider_var.get()
-        if provider not in ['openai', 'groq']:
+        if provider not in ['openai', 'groq', 'apify']:
             messagebox.showerror("Invalid Provider", "Please select a valid AI provider")
             return
         
@@ -2843,6 +2992,18 @@ Image URL: {product.get('image_url', 'N/A')}
                              "Please add your Groq API key in Settings tab or .env file.\n"
                              "Format: GROQ_API_KEY=gsk_...")
                 messagebox.showerror("Groq Not Configured", error_msg)
+                return
+        elif provider == 'apify':
+            api_key = (self.credentials.get('apify_api_key') or '').strip()
+            if not api_key and hasattr(self, 'cred_entries') and 'apify_api_key' in self.cred_entries:
+                api_key = self.cred_entries['apify_api_key'].get().strip()
+            
+            if not api_key or len(api_key) < 10:
+                error_msg = ("Apify API key is not configured.\n\n"
+                             f"Found key length: {len(api_key) if api_key else 0}\n\n"
+                             "Please add your Apify API key in Settings tab or .env file.\n"
+                             "Format: APIFY_API_KEY=apify_...")
+                messagebox.showerror("Apify Not Configured", error_msg)
                 return
         else:  # openai
             api_key = (self.credentials.get('openai_api_key') or '').strip()
@@ -2925,6 +3086,179 @@ Script Requirements:
                         raise ImportError("Groq package not installed. Install with: python -m pip install groq")
                     except Exception as e:
                         raise Exception(f"Groq API error: {str(e)}")
+                elif provider == 'apify':
+                    try:
+                        from apify_client import ApifyClient
+                        self.root.after(0, lambda: self.update_status("🔄 Connecting to Apify API..."))
+                        client = ApifyClient(api_key)
+                        
+                        # Get actor ID from settings or use default
+                        actor_id = ""
+                        if hasattr(self, 'cred_entries') and 'apify_actor_id' in self.cred_entries:
+                            actor_id = self.cred_entries['apify_actor_id'].get().strip()
+                        
+                        # Also check credentials (loaded from .env or credentials.json)
+                        if not actor_id:
+                            actor_id = (self.credentials.get('apify_actor_id') or '').strip()
+                        
+                        # If no actor ID configured, use OpenAI directly through Apify API key
+                        # (This assumes Apify API key can be used with OpenAI, or fallback to OpenAI)
+                        if not actor_id:
+                            # Try to use OpenAI directly if Apify API key format matches OpenAI
+                            # Otherwise, suggest configuring an actor
+                            error_msg = ("Apify Actor ID not configured.\n\n"
+                                       "Please configure an Apify Actor ID in Settings tab or .env file.\n"
+                                       "Format: username~actorName (e.g., apify~web-scraper)\n\n"
+                                       "Or use OpenAI/Groq providers directly for script generation.")
+                            raise Exception(error_msg)
+                        
+                        self.root.after(0, lambda: self.update_status(f"🔄 Running Apify actor: {actor_id}..."))
+                        
+                        # Validate actor exists before running
+                        try:
+                            actor_info = client.actor(actor_id).get()
+                            if not actor_info or (isinstance(actor_info, dict) and not actor_info.get('data')):
+                                raise Exception(f"Actor '{actor_id}' not found or not accessible")
+                        except Exception as e:
+                            error_msg = str(e)
+                            if 'not found' in error_msg.lower() or '404' in error_msg or 'does not exist' in error_msg.lower():
+                                raise Exception(
+                                    f"Actor '{actor_id}' not found.\n\n"
+                                    "Please check:\n"
+                                    "1. The Actor ID format is correct (username~actorName or actor ID)\n"
+                                    "2. The Actor exists in your Apify account\n"
+                                    "3. You have access to this Actor\n"
+                                    "4. Visit https://console.apify.com/actors to find/verify your Actor ID\n\n"
+                                    f"Current Actor ID: {actor_id}\n\n"
+                                    "Note: Actor IDs are case-sensitive and must match exactly."
+                                )
+                            raise
+                        
+                        # Run the actor with the prompt
+                        run_input = {
+                            "prompt": prompt,
+                            "system_prompt": "You are a professional TikTok video script writer specializing in product marketing and viral content.",
+                            "max_tokens": 500,
+                            "temperature": 0.8
+                        }
+                        
+                        # Try different input formats that actors might expect
+                        try:
+                            run = client.actor(actor_id).call(run_input=run_input)
+                        except Exception as e:
+                            error_msg = str(e)
+                            # Check if it's an actor not found error
+                            if 'not found' in error_msg.lower() or '404' in error_msg or 'does not exist' in error_msg.lower():
+                                raise Exception(
+                                    f"Actor '{actor_id}' not found.\n\n"
+                                    "Please check:\n"
+                                    "1. The Actor ID format is correct (username~actorName or actor ID)\n"
+                                    "2. The Actor exists and is accessible\n"
+                                    "3. You have the correct permissions\n"
+                                    "4. Visit https://console.apify.com/actors to find/verify your Actor ID\n\n"
+                                    f"Current Actor ID: {actor_id}\n\n"
+                                    "Note: Actor IDs are case-sensitive and must match exactly."
+                                )
+                            # Try alternative input format
+                            if "input" in error_msg.lower() or "invalid input" in error_msg.lower():
+                                try:
+                                    run_input_alt = {
+                                        "input": {
+                                            "prompt": prompt,
+                                            "system_prompt": "You are a professional TikTok video script writer specializing in product marketing and viral content.",
+                                            "max_tokens": 500,
+                                            "temperature": 0.8
+                                        }
+                                    }
+                                    run = client.actor(actor_id).call(run_input=run_input_alt)
+                                except Exception as e2:
+                                    raise Exception(f"Failed to run Apify actor '{actor_id}': {str(e2)}\n\nOriginal error: {str(e)}")
+                            else:
+                                raise Exception(f"Failed to run Apify actor '{actor_id}': {error_msg}")
+                        
+                        # Wait for the run to finish
+                        self.root.after(0, lambda: self.update_status("🔄 Waiting for Apify actor to complete..."))
+                        run_id = run['data']['id'] if isinstance(run, dict) and 'data' in run else run.get('id') if isinstance(run, dict) else str(run)
+                        
+                        # Poll for completion
+                        import time
+                        max_wait_time = 300  # 5 minutes max
+                        wait_time = 0
+                        while wait_time < max_wait_time:
+                            try:
+                                run_status = client.run(run_id).get()
+                                status = run_status.get('data', {}).get('status') if isinstance(run_status, dict) else run_status.get('status')
+                                
+                                if status in ['SUCCEEDED', 'SUCCEEDED_AND_TERMINATED']:
+                                    break
+                                elif status in ['FAILED', 'ABORTED', 'TIMED-OUT']:
+                                    raise Exception(f"Apify actor failed with status: {status}")
+                                
+                                time.sleep(2)
+                                wait_time += 2
+                            except Exception as e:
+                                error_msg = str(e)
+                                if 'not found' in error_msg.lower() or '404' in error_msg:
+                                    raise Exception(
+                                        f"Actor '{actor_id}' not found.\n\n"
+                                        "Please check:\n"
+                                        "1. The Actor ID format is correct (username~actorName)\n"
+                                        "2. The Actor exists in your Apify account\n"
+                                        "3. You have access to this Actor\n"
+                                        "4. Visit https://console.apify.com/actors to find your Actor ID\n\n"
+                                        f"Current Actor ID: {actor_id}"
+                                    )
+                                raise Exception(f"Apify actor error: {error_msg}\n\nActor ID: {actor_id}")
+                        
+                        if wait_time >= max_wait_time:
+                            raise Exception("Apify actor timed out after 5 minutes")
+                        
+                        # Get the dataset items
+                        dataset_id = run_status.get('data', {}).get('defaultDatasetId') if isinstance(run_status, dict) else run_status.get('defaultDatasetId')
+                        if not dataset_id:
+                            raise Exception("Could not get dataset ID from Apify run")
+                        
+                        dataset_items = list(client.dataset(dataset_id).list_items())
+                        
+                        if not dataset_items:
+                            raise Exception("Apify actor returned no results")
+                        
+                        # Extract script from the first item
+                        result = dataset_items[0]
+                        # Handle different response formats
+                        script = None
+                        if isinstance(result, dict):
+                            if 'text' in result:
+                                script = result['text'].strip()
+                            elif 'content' in result:
+                                script = result['content'].strip()
+                            elif 'message' in result:
+                                script = result['message'].strip()
+                            elif 'script' in result:
+                                script = result['script'].strip()
+                            elif 'output' in result:
+                                script = str(result['output']).strip()
+                            elif 'result' in result:
+                                script = str(result['result']).strip()
+                            else:
+                                # Try to get any text-like field
+                                for key in ['response', 'generated_text', 'completion', 'answer']:
+                                    if key in result:
+                                        script = str(result[key]).strip()
+                                        break
+                        
+                        if not script:
+                            # Last resort: convert entire result to string
+                            script = str(result).strip()
+                        
+                        if not script or script == '{}' or script == '[]':
+                            raise Exception("Could not extract script from Apify response. Check actor output format.")
+                        
+                        self.root.after(0, lambda: self.update_status("🔄 Processing script response..."))
+                    except ImportError:
+                        raise ImportError("Apify package not installed. Install with: python -m pip install apify-client")
+                    except Exception as e:
+                        raise Exception(f"Apify API error: {str(e)}")
                 else:  # openai
                     try:
                         import openai
