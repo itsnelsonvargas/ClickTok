@@ -73,3 +73,7 @@ playwright/.cache/
 # OS
 Thumbs.db
 .DS_Store
+
+# Docker
+.env.docker.local
+docker-compose.override.yml

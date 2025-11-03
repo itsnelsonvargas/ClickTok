@@ -1,0 +1,108 @@
+version: '3.8'
+
+services:
+  clicktok:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: clicktok-app
+
+    # Restart policy
+    restart: unless-stopped
+
+    # Environment variables
+    environment:
+      - DISPLAY=${DISPLAY:-:0}  # For GUI support (X11)
+      - PYTHONUNBUFFERED=1
+
+    # Volume mounts for hot-reload and data persistence
+    volumes:
+      # Source code - hot reload
+      - ./src:/app/src:rw
+      - ./gui:/app/gui:rw
+      - ./config:/app/config:rw
+      - ./main.py:/app/main.py:rw
+      - ./setup.py:/app/setup.py:rw
+
+      # Data persistence (survives container restarts)
+      - clicktok-data:/app/data
+      - clicktok-logs:/app/logs
+
+      # Assets (can be modified without rebuild)
+      - ./assets:/app/assets:rw
+
+      # Configuration persistence
+      - ./config/credentials.json:/app/config/credentials.json:rw
+
+    # Network configuration
+    networks:
+      - clicktok-network
+
+    # Port mapping (for future web interface)
+    ports:
+      - "8080:8080"
+
+    # Command - can be overridden
+    command: python main.py
+
+    # For GUI support on Linux (optional)
+    # Uncomment if you need GUI on Linux with X11
+    # volumes:
+    #   - /tmp/.X11-unix:/tmp/.X11-unix:rw
+    # environment:
+    #   - DISPLAY=${DISPLAY}
+    # network_mode: host
+
+  # Optional: Add a CLI-only service
+  clicktok-cli:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: clicktok-cli
+
+    # This service is for CLI mode
+    profiles:
+      - cli
+
+    restart: "no"
+
+    environment:
+      - PYTHONUNBUFFERED=1
+
+    volumes:
+      # Source code - hot reload
+      - ./src:/app/src:rw
+      - ./gui:/app/gui:rw
+      - ./config:/app/config:rw
+      - ./main.py:/app/main.py:rw
+
+      # Data persistence (shared with GUI service)
+      - clicktok-data:/app/data
+      - clicktok-logs:/app/logs
+
+      # Assets
+      - ./assets:/app/assets:rw
+
+      # Configuration
+      - ./config/credentials.json:/app/config/credentials.json:rw
+
+    networks:
+      - clicktok-network
+
+    command: python main.py --cli
+
+    # Interactive mode for CLI
+    stdin_open: true
+    tty: true
+
+# Named volumes for data persistence
+volumes:
+  clicktok-data:
+    driver: local
+  clicktok-logs:
+    driver: local
+
+# Network
+networks:
+  clicktok-network:
+    driver: bridge
