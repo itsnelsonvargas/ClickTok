@@ -2,6 +2,15 @@
 
 **Professional semi-automated system for generating consistent income through TikTok Shop affiliation with minimal manual work.**
 
+## 🌍 100% Portable - Runs on ANY Computer!
+
+✅ **Docker-based** - No dependency issues
+✅ **Cross-platform** - Windows, Mac, Linux
+✅ **One command** - `docker-compose up --build`
+✅ **Guaranteed** - If it works once, it works everywhere
+
+**Quick Deploy:** See [QUICK_DEPLOY.md](QUICK_DEPLOY.md) for instant deployment guide!
+
 ---
 
 ## Table of Contents
@@ -10,6 +19,7 @@
 2. [Architecture](#architecture)
 3. [Features](#features)
 4. [Installation](#installation)
+   - **🐳 [Docker Setup](DOCKER_QUICKSTART.md)** (Recommended - works on any computer!)
 5. [Configuration](#configuration)
 6. [Usage Guide](#usage-guide)
 7. [Workflow](#workflow)
@@ -185,6 +195,31 @@ That's it! The setup script will automatically:
 - ✅ Verify installation
 
 **Time required:** 5-10 minutes
+
+### 🐳 Docker Installation (100% Guaranteed)
+
+**The easiest way to run ClickTok on any computer with zero dependency issues!**
+
+```bash
+# 1. Install Docker Desktop from https://www.docker.com/products/docker-desktop/
+# 2. Start Docker Desktop
+# 3. Run ClickTok with one command:
+
+docker-compose up --build
+```
+
+**Windows users** can simply double-click: `docker-start.bat`
+
+**Mac/Linux users** can run: `./docker-start.sh`
+
+**Why Docker?**
+- ✅ **Works on any computer** (Windows, Mac, Linux)
+- ✅ **Zero dependency issues** - Everything pre-installed
+- ✅ **FFmpeg & Playwright** automatically configured
+- ✅ **Hot-reload** - Code changes sync instantly
+- ✅ **Isolated** - Doesn't interfere with your system
+
+For complete Docker documentation, see: **[DOCKER_README.md](DOCKER_README.md)**
 
 ### 📖 Detailed Installation Guide
 

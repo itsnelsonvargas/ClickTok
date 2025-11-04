@@ -2,6 +2,10 @@
 
 This guide explains how to run ClickTok using Docker, ensuring it works on any computer with 100% consistency.
 
+**🚀 NEW TO DOCKER?** See [DOCKER_QUICKSTART.md](DOCKER_QUICKSTART.md) for a super simple 3-step guide!
+
+---
+
 ## Why Docker?
 
 - **Guaranteed deployment**: Works identically on any computer
