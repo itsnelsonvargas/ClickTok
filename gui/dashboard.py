@@ -3301,7 +3301,7 @@ Script Requirements:
         threading.Thread(target=task, daemon=True).start()
     
     def create_video_from_script(self):
-        """Create a video using the generated script"""
+        """Create a video using the generated script with narration and subtitles"""
         # Get generated script
         script = self.generated_script_text.get('1.0', tk.END).strip()
         
@@ -3329,44 +3329,117 @@ Script Requirements:
             messagebox.showerror("Error", "Could not find selected product in database")
             return
         
+        # Get script duration
+        try:
+            script_duration = int(self.script_duration_var.get())
+        except:
+            script_duration = 15
+        
         self.update_status("Creating video from script...")
+        self.script_status_label.config(text="Creating video with script narration...", fg='blue')
         
         def task():
             try:
+                self.root.after(0, lambda: self.update_status("🔄 Generating narration from script..."))
+                
+                # Generate narration audio using ElevenLabs or fallback
+                narration_audio_path = None
+                elevenlabs_key = (self.credentials.get('elevenlabs_api_key') or '').strip()
+                if not elevenlabs_key and hasattr(self, 'cred_entries') and 'elevenlabs_api_key' in self.cred_entries:
+                    elevenlabs_key = self.cred_entries['elevenlabs_api_key'].get().strip()
+                
+                if elevenlabs_key and len(elevenlabs_key) > 10:
+                    # Use ElevenLabs for high-quality narration
+                    try:
+                        import requests
+                        self.root.after(0, lambda: self.update_status("🔄 Generating voiceover with ElevenLabs..."))
+                        
+                        narration_audio_path = VIDEOS_DIR / f"{product['product_id']}_narration.mp3"
+                        
+                        # Call ElevenLabs API
+                        url = "https://api.elevenlabs.io/v1/text-to-speech/21m00Tcm4TlvDq8ikWAM"  # Default voice
+                        headers = {
+                            "Accept": "audio/mpeg",
+                            "Content-Type": "application/json",
+                            "xi-api-key": elevenlabs_key
+                        }
+                        data = {
+                            "text": script,
+                            "model_id": "eleven_monolingual_v1",
+                            "voice_settings": {
+                                "stability": 0.5,
+                                "similarity_boost": 0.75
+                            }
+                        }
+                        
+                        response = requests.post(url, json=data, headers=headers, timeout=60)
+                        if response.status_code == 200:
+                            with open(narration_audio_path, 'wb') as f:
+                                f.write(response.content)
+                            logger.info("Generated narration with ElevenLabs")
+                        else:
+                            logger.warning(f"ElevenLabs API error: {response.status_code}")
+                            narration_audio_path = None
+                    except Exception as e:
+                        logger.warning(f"Could not use ElevenLabs: {e}")
+                        narration_audio_path = None
+                
                 # Generate caption and hashtags
+                self.root.after(0, lambda: self.update_status("🔄 Generating caption and hashtags..."))
                 caption, hashtags = self.caption_generator.create_full_post(product)
                 
-                # Create video (using existing video creation)
+                # Create video with script
+                self.root.after(0, lambda: self.update_status("🔄 Creating video with script..."))
                 video_path = VIDEOS_DIR / f"{product['product_id']}_script_video.mp4"
                 
-                if self.video_creator.create_product_video(product, video_path):
+                # Create video with script narration and subtitles
+                success = self.video_creator.create_product_video_with_script(
+                    product=product,
+                    script=script,
+                    output_path=video_path,
+                    narration_audio_path=narration_audio_path,
+                    duration=script_duration,
+                    template=self.script_tone_var.get().lower() if self.script_tone_var.get().lower() in ['modern', 'minimal', 'energetic'] else 'modern'
+                )
+                
+                if success:
                     # Save video to database
                     self.root.after(0, lambda: self.db.add_video({
                         'product_id': product['product_id'],
                         'video_path': str(video_path),
                         'caption': caption,
                         'hashtags': hashtags,
+                        'script': script,  # Store the script
                         'status': 'created'
                     }))
                     
                     self.root.after(0, lambda: self.db.update_product_status(product['product_id'], 'video_created'))
                     self.root.after(0, self.refresh_videos)
                     
+                    narration_info = "with AI voiceover" if narration_audio_path else "with subtitles"
                     self.root.after(0, lambda: messagebox.showinfo(
                         "Success!",
                         f"Video created successfully!\n\n"
                         f"Product: {product.get('name', 'Unknown')}\n"
-                        f"Video saved to: {video_path.name}\n\n"
-                        f"The script has been used in video creation."
+                        f"Video saved to: {video_path.name}\n"
+                        f"Duration: {script_duration} seconds\n"
+                        f"Features: {narration_info}\n\n"
+                        f"The script has been incorporated into the video."
                     ))
+                    self.root.after(0, lambda: self.script_status_label.config(
+                        text=f"✅ Video created successfully!", fg='green'))
                     self.root.after(0, lambda: self.update_status("✅ Video created!"))
                 else:
                     self.root.after(0, lambda: messagebox.showerror("Error", "Failed to create video"))
+                    self.root.after(0, lambda: self.script_status_label.config(
+                        text="❌ Video creation failed", fg='red'))
                     self.root.after(0, lambda: self.update_status("❌ Video creation failed"))
                     
             except Exception as e:
                 logger.error(f"Error creating video from script: {e}", exc_info=True)
                 self.root.after(0, lambda: messagebox.showerror("Error", f"Failed to create video:\n{str(e)}"))
+                self.root.after(0, lambda: self.script_status_label.config(
+                    text="❌ Error occurred", fg='red'))
                 self.root.after(0, lambda: self.update_status("❌ Error occurred"))
         
         threading.Thread(target=task, daemon=True).start()
