@@ -3357,7 +3357,7 @@ Script Requirements:
                         narration_audio_path = VIDEOS_DIR / f"{product['product_id']}_narration.mp3"
                         
                         # Call ElevenLabs API
-                        url = "https://api.elevenlabs.io/v1/text-to-speech/21m00Tcm4TlvDq8ikWAM"  # Default voice
+                        url = "https://api.elevenlabs.io/v1/text-to-speech/2kNWn6KWNBcxf4GSXv5J"  # Default voice
                         headers = {
                             "Accept": "audio/mpeg",
                             "Content-Type": "application/json",
