@@ -6,6 +6,7 @@ import logging
 from pathlib import Path
 from typing import Dict, List, Optional, Tuple
 import random
+import requests
 
 # Fix for PIL.Image.ANTIALIAS deprecation in newer Pillow versions
 # This must be done BEFORE importing MoviePy, as MoviePy uses ANTIALIAS internally
@@ -44,6 +45,10 @@ class VideoCreator:
         self.resolution = config.get('resolution', (1080, 1920))  # width x height (9:16)
         self.fps = config.get('fps', 30)
         self.duration = config.get('duration', 15)
+        
+        # Ensure products directory exists
+        products_dir = self.assets_dir.parent / "data" / "products"
+        products_dir.mkdir(parents=True, exist_ok=True)
 
     def create_product_video(
         self,
@@ -126,22 +131,93 @@ class VideoCreator:
         bg = bg.set_duration(self.duration)
         return bg
 
+    def download_product_image(self, product: Dict) -> bool:
+        """
+        Download product image for a product (public method)
+        
+        Args:
+            product: Product dictionary with 'product_id' and 'image_url'
+            
+        Returns:
+            True if download successful or already exists, False otherwise
+        """
+        product_image_path = self.assets_dir.parent / "data" / "products" / f"{product['product_id']}.jpg"
+        
+        # If image already exists, return True
+        if product_image_path.exists():
+            logger.debug(f"Image already exists: {product_image_path}")
+            return True
+        
+        # Try to download
+        image_url = product.get('image_url', '')
+        if image_url and image_url.startswith('http'):
+            return self._download_product_image(image_url, product_image_path)
+        else:
+            logger.warning(f"No valid image URL for product {product.get('name', 'Unknown')}")
+            return False
+    
+    def _download_product_image(self, image_url: str, save_path: Path) -> bool:
+        """
+        Download product image from URL (internal method)
+        
+        Args:
+            image_url: URL of the product image
+            save_path: Path where to save the image
+            
+        Returns:
+            True if download successful, False otherwise
+        """
+        if not image_url or not image_url.startswith('http'):
+            logger.warning(f"Invalid image URL: {image_url}")
+            return False
+            
+        try:
+            logger.info(f"Downloading product image from {image_url}")
+            response = requests.get(image_url, timeout=30, headers={
+                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
+            })
+            response.raise_for_status()
+            
+            # Save image
+            with open(save_path, 'wb') as f:
+                f.write(response.content)
+            
+            logger.info(f"Successfully downloaded image to {save_path}")
+            return True
+            
+        except Exception as e:
+            logger.warning(f"Failed to download image from {image_url}: {e}")
+            return False
+
     def _create_product_clip(self, product: Dict, template: str) -> ImageClip:
         """
         Create the main product visual clip
         Downloads or uses cached product image
         """
-        # In real implementation, download and cache the image
-        # For now, create a placeholder
         product_image_path = self.assets_dir.parent / "data" / "products" / f"{product['product_id']}.jpg"
 
         if product_image_path.exists():
             # Load actual product image
+            logger.debug(f"Using cached image: {product_image_path}")
             img = Image.open(product_image_path)
         else:
-            # Create placeholder
-            img = self._create_placeholder_image(product)
-            img.save(product_image_path)
+            # Try to download the image
+            image_url = product.get('image_url', '')
+            if image_url and image_url.startswith('http'):
+                logger.info(f"Image not cached, downloading from {image_url}")
+                if self._download_product_image(image_url, product_image_path):
+                    # Successfully downloaded, load it
+                    img = Image.open(product_image_path)
+                else:
+                    # Download failed, create placeholder
+                    logger.warning(f"Download failed, creating placeholder for {product.get('name', 'Unknown')}")
+                    img = self._create_placeholder_image(product)
+                    img.save(product_image_path)
+            else:
+                # No valid image URL, create placeholder
+                logger.info(f"No valid image URL, creating placeholder for {product.get('name', 'Unknown')}")
+                img = self._create_placeholder_image(product)
+                img.save(product_image_path)
 
         # Resize to fit in center of frame
         img = self._prepare_product_image(img, template)

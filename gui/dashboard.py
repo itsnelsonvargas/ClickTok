@@ -1048,11 +1048,9 @@ Image URL: {product.get('image_url', 'N/A')}
                         self.root.after(0, lambda: self.db.update_product_status(product['product_id'], 'video_created'))
                         
                         self.root.after(0, self.refresh_videos)
-                        self.root.after(0, lambda: messagebox.showinfo(
-                            "Success!", 
-                            f"Video created successfully!\n\n"
-                            f"Product: {product.get('name', 'Unknown')}\n"
-                            f"Video saved to: {video_path.name}"
+                        self.root.after(0, lambda: self._show_video_created_dialog(
+                            video_path=video_path,
+                            product_name=product.get('name', 'Unknown')
                         ))
                         self.root.after(0, lambda: self.update_status("✅ Video created!"))
                     else:
@@ -1208,6 +1206,8 @@ Image URL: {product.get('image_url', 'N/A')}
         self.update_status("Creating videos...")
         def task():
             try:
+                created_count = 0
+                created_videos = []
                 for product in products:
                     caption, hashtags = self.caption_generator.create_full_post(product)
                     video_path = VIDEOS_DIR / f"{product['product_id']}_video.mp4"
@@ -1215,8 +1215,87 @@ Image URL: {product.get('image_url', 'N/A')}
                         self.db.add_video({'product_id': product['product_id'], 'video_path': str(video_path),
                                           'caption': caption, 'hashtags': hashtags, 'status': 'created'})
                         self.db.update_product_status(product['product_id'], 'video_created')
+                        created_count += 1
+                        created_videos.append((video_path, product.get('name', 'Unknown')))
+                
                 self.root.after(0, self.refresh_videos)
-                self.root.after(0, lambda: messagebox.showinfo("Success", f"Created {len(products)} videos!"))
+                
+                # Show summary dialog with folder access
+                def show_batch_summary():
+                    dialog = tk.Toplevel(self.root)
+                    dialog.title("Videos Created Successfully!")
+                    dialog.geometry("600x400")
+                    dialog.transient(self.root)
+                    dialog.grab_set()
+                    
+                    # Center the dialog
+                    dialog.update_idletasks()
+                    x = (dialog.winfo_screenwidth() // 2) - (dialog.winfo_width() // 2)
+                    y = (dialog.winfo_screenheight() // 2) - (dialog.winfo_height() // 2)
+                    dialog.geometry(f"+{x}+{y}")
+                    
+                    # Header
+                    header_frame = tk.Frame(dialog)
+                    header_frame.pack(pady=10)
+                    tk.Label(header_frame, text=f"✅ Created {created_count} Video(s)!", 
+                            font=('Arial', 14, 'bold'), fg='green').pack()
+                    
+                    # Content frame
+                    content_frame = tk.Frame(dialog)
+                    content_frame.pack(pady=10, padx=20, fill='both', expand=True)
+                    
+                    # Folder path
+                    folder_path = str(VIDEOS_DIR.resolve())
+                    tk.Label(content_frame, text="Videos saved to:", font=('Arial', 9, 'bold')).pack(anchor='w', pady=5)
+                    
+                    path_text_frame = tk.Frame(content_frame)
+                    path_text_frame.pack(fill='both', expand=True, pady=5)
+                    
+                    path_text = scrolledtext.ScrolledText(path_text_frame, height=2, wrap=tk.WORD, 
+                                                         font=('Consolas', 9))
+                    path_text.pack(fill='both', expand=True)
+                    path_text.insert('1.0', folder_path)
+                    path_text.config(state='disabled')
+                    
+                    # Video list
+                    if created_videos:
+                        tk.Label(content_frame, text="Created Videos:", font=('Arial', 9, 'bold')).pack(anchor='w', pady=(10, 5))
+                        list_frame = tk.Frame(content_frame)
+                        list_frame.pack(fill='both', expand=True)
+                        
+                        video_list = scrolledtext.ScrolledText(list_frame, height=8, wrap=tk.WORD, 
+                                                              font=('Consolas', 8))
+                        video_list.pack(fill='both', expand=True)
+                        for video_path, product_name in created_videos:
+                            video_list.insert(tk.END, f"• {product_name}\n  {video_path.name}\n\n")
+                        video_list.config(state='disabled')
+                    
+                    # Buttons
+                    btn_frame = tk.Frame(dialog)
+                    btn_frame.pack(pady=15)
+                    
+                    def open_folder():
+                        try:
+                            if os.name == 'nt':  # Windows
+                                os.startfile(folder_path)
+                            elif sys.platform == 'darwin':  # macOS
+                                os.system(f'open "{folder_path}"')
+                            else:  # Linux
+                                os.system(f'xdg-open "{folder_path}"')
+                        except Exception as e:
+                            messagebox.showerror("Error", f"Could not open folder:\n{str(e)}")
+                    
+                    def copy_path():
+                        dialog.clipboard_clear()
+                        dialog.clipboard_append(folder_path)
+                        dialog.update()
+                        messagebox.showinfo("Copied", "Folder path copied to clipboard!")
+                    
+                    ttk.Button(btn_frame, text="📁 Open Folder", command=open_folder, width=15).pack(side='left', padx=5)
+                    ttk.Button(btn_frame, text="📋 Copy Path", command=copy_path, width=15).pack(side='left', padx=5)
+                    ttk.Button(btn_frame, text="Close", command=dialog.destroy, width=15).pack(side='left', padx=5)
+                
+                self.root.after(0, show_batch_summary)
             except Exception as e:
                 logger.error(f"Error: {e}", exc_info=True)
                 self.root.after(0, lambda: messagebox.showerror("Error", str(e)))
@@ -3062,7 +3141,21 @@ Script Requirements:
                 if notes:
                     prompt += f"\n\nAdditional Instructions:\n{notes}"
                 
-                prompt += "\n\nProvide the script as readable text that can be narrated in a video."
+                prompt += """\n\nIMPORTANT: Provide the script in the following structured format:
+
+VIDEO_INSTRUCTIONS:
+[Provide detailed instructions for video creation, including:
+- Visual elements to show (product images, text overlays, animations)
+- Timing and pacing guidance
+- Visual effects or transitions to use
+- Text overlays and their positioning
+- Any specific visual cues or moments]
+
+TTS_TEXT:
+[Provide ONLY the narration text that will be spoken by the voiceover.
+This should be natural, conversational, and optimized for speech.
+Do NOT include video instructions here - only the spoken words.
+This text will be converted to speech using text-to-speech.]"""
 
                 # Generate script using selected provider
                 if provider == 'groq':
@@ -3300,6 +3393,137 @@ Script Requirements:
         
         threading.Thread(target=task, daemon=True).start()
     
+    def _show_video_created_dialog(self, video_path: Path, product_name: str, additional_info: str = ""):
+        """Show a dialog with video path and options to open the video or folder"""
+        full_path = str(video_path.resolve())
+        
+        # Create custom dialog
+        dialog = tk.Toplevel(self.root)
+        dialog.title("Video Created Successfully!")
+        dialog.geometry("600x300")
+        dialog.transient(self.root)
+        dialog.grab_set()
+        
+        # Center the dialog
+        dialog.update_idletasks()
+        x = (dialog.winfo_screenwidth() // 2) - (dialog.winfo_width() // 2)
+        y = (dialog.winfo_screenheight() // 2) - (dialog.winfo_height() // 2)
+        dialog.geometry(f"+{x}+{y}")
+        
+        # Header
+        header_frame = tk.Frame(dialog)
+        header_frame.pack(pady=10)
+        tk.Label(header_frame, text="✅ Video Created Successfully!", 
+                font=('Arial', 14, 'bold'), fg='green').pack()
+        
+        # Content frame
+        content_frame = tk.Frame(dialog)
+        content_frame.pack(pady=10, padx=20, fill='both', expand=True)
+        
+        # Product name
+        tk.Label(content_frame, text=f"Product: {product_name}", 
+                font=('Arial', 10, 'bold')).pack(anchor='w', pady=5)
+        
+        # Video path
+        path_frame = tk.Frame(content_frame)
+        path_frame.pack(fill='x', pady=5)
+        tk.Label(path_frame, text="Video Location:", font=('Arial', 9, 'bold')).pack(anchor='w')
+        
+        # Path text with scrollbar
+        path_text_frame = tk.Frame(path_frame)
+        path_text_frame.pack(fill='both', expand=True, pady=5)
+        
+        path_text = scrolledtext.ScrolledText(path_text_frame, height=3, wrap=tk.WORD, 
+                                             font=('Consolas', 9))
+        path_text.pack(fill='both', expand=True)
+        path_text.insert('1.0', full_path)
+        path_text.config(state='disabled')
+        
+        # Additional info if provided
+        if additional_info:
+            tk.Label(content_frame, text=additional_info, 
+                    font=('Arial', 9), fg='gray').pack(anchor='w', pady=5)
+        
+        # Buttons frame
+        btn_frame = tk.Frame(dialog)
+        btn_frame.pack(pady=15)
+        
+        def open_video():
+            try:
+                if os.name == 'nt':  # Windows
+                    os.startfile(full_path)
+                elif sys.platform == 'darwin':  # macOS
+                    os.system(f'open "{full_path}"')
+                else:  # Linux
+                    os.system(f'xdg-open "{full_path}"')
+            except Exception as e:
+                messagebox.showerror("Error", f"Could not open video:\n{str(e)}")
+        
+        def open_folder():
+            try:
+                folder_path = str(video_path.parent.resolve())
+                if os.name == 'nt':  # Windows
+                    os.startfile(folder_path)
+                elif sys.platform == 'darwin':  # macOS
+                    os.system(f'open "{folder_path}"')
+                else:  # Linux
+                    os.system(f'xdg-open "{folder_path}"')
+            except Exception as e:
+                messagebox.showerror("Error", f"Could not open folder:\n{str(e)}")
+        
+        def copy_path():
+            dialog.clipboard_clear()
+            dialog.clipboard_append(full_path)
+            dialog.update()
+            messagebox.showinfo("Copied", "Video path copied to clipboard!")
+        
+        ttk.Button(btn_frame, text="🎬 Open Video", command=open_video, width=15).pack(side='left', padx=5)
+        ttk.Button(btn_frame, text="📁 Open Folder", command=open_folder, width=15).pack(side='left', padx=5)
+        ttk.Button(btn_frame, text="📋 Copy Path", command=copy_path, width=15).pack(side='left', padx=5)
+        ttk.Button(btn_frame, text="Close", command=dialog.destroy, width=15).pack(side='left', padx=5)
+    
+    def _parse_script(self, script: str) -> tuple:
+        """
+        Parse script to extract video instructions and TTS text.
+        
+        Returns:
+            tuple: (video_instructions, tts_text, full_script)
+            If script doesn't have structured format, returns (None, script, script)
+        """
+        import re
+        
+        # Try to extract structured format
+        # Look for VIDEO_INSTRUCTIONS section (everything until TTS_TEXT or end)
+        video_instructions_match = re.search(
+            r'VIDEO_INSTRUCTIONS:\s*(.*?)(?=\s*TTS_TEXT:|$)', 
+            script, 
+            re.DOTALL | re.IGNORECASE
+        )
+        
+        # Look for TTS_TEXT section (everything until VIDEO_INSTRUCTIONS or end)
+        tts_text_match = re.search(
+            r'TTS_TEXT:\s*(.*?)(?=\s*VIDEO_INSTRUCTIONS:|$)', 
+            script, 
+            re.DOTALL | re.IGNORECASE
+        )
+        
+        if video_instructions_match and tts_text_match:
+            video_instructions = video_instructions_match.group(1).strip()
+            tts_text = tts_text_match.group(1).strip()
+            # Only return video_instructions if it's not empty
+            if video_instructions:
+                return video_instructions, tts_text, script
+            else:
+                return None, tts_text, script
+        elif tts_text_match:
+            # Only TTS_TEXT found, use it
+            tts_text = tts_text_match.group(1).strip()
+            if tts_text:  # Only return if not empty
+                return None, tts_text, script
+        
+        # No structured format found, assume entire script is TTS text
+        return None, script, script
+    
     def create_video_from_script(self):
         """Create a video using the generated script with narration and subtitles"""
         # Get generated script
@@ -3340,6 +3564,14 @@ Script Requirements:
         
         def task():
             try:
+                # Parse script to extract TTS text and video instructions
+                video_instructions, tts_text, full_script = self._parse_script(script)
+                
+                # Log what was extracted
+                if video_instructions:
+                    logger.info("Extracted video instructions from structured script")
+                logger.info(f"Using TTS text for narration (length: {len(tts_text)} chars)")
+                
                 self.root.after(0, lambda: self.update_status("🔄 Generating narration from script..."))
                 
                 # Generate narration audio using ElevenLabs or fallback
@@ -3356,7 +3588,7 @@ Script Requirements:
                         
                         narration_audio_path = VIDEOS_DIR / f"{product['product_id']}_narration.mp3"
                         
-                        # Call ElevenLabs API
+                        # Call ElevenLabs API - use ONLY the TTS text, not video instructions
                         url = "https://api.elevenlabs.io/v1/text-to-speech/2kNWn6KWNBcxf4GSXv5J"  # Default voice
                         headers = {
                             "Accept": "audio/mpeg",
@@ -3364,7 +3596,7 @@ Script Requirements:
                             "xi-api-key": elevenlabs_key
                         }
                         data = {
-                            "text": script,
+                            "text": tts_text,  # Use only TTS text, not full script
                             "model_id": "eleven_monolingual_v1",
                             "voice_settings": {
                                 "stability": 0.5,
@@ -3393,9 +3625,11 @@ Script Requirements:
                 video_path = VIDEOS_DIR / f"{product['product_id']}_script_video.mp4"
                 
                 # Create video with script narration and subtitles
+                # Use TTS text for subtitles (to match what's being spoken)
+                # Video instructions (if available) can be used for visual guidance
                 success = self.video_creator.create_product_video_with_script(
                     product=product,
-                    script=script,
+                    script=tts_text,  # Use TTS text for subtitles to match narration
                     output_path=video_path,
                     narration_audio_path=narration_audio_path,
                     duration=script_duration,
@@ -3417,14 +3651,11 @@ Script Requirements:
                     self.root.after(0, self.refresh_videos)
                     
                     narration_info = "with AI voiceover" if narration_audio_path else "with subtitles"
-                    self.root.after(0, lambda: messagebox.showinfo(
-                        "Success!",
-                        f"Video created successfully!\n\n"
-                        f"Product: {product.get('name', 'Unknown')}\n"
-                        f"Video saved to: {video_path.name}\n"
-                        f"Duration: {script_duration} seconds\n"
-                        f"Features: {narration_info}\n\n"
-                        f"The script has been incorporated into the video."
+                    additional_info = f"Duration: {script_duration} seconds | Features: {narration_info}"
+                    self.root.after(0, lambda: self._show_video_created_dialog(
+                        video_path=video_path,
+                        product_name=product.get('name', 'Unknown'),
+                        additional_info=additional_info
                     ))
                     self.root.after(0, lambda: self.script_status_label.config(
                         text=f"✅ Video created successfully!", fg='green'))
