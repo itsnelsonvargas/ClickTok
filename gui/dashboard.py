@@ -505,9 +505,9 @@ class ClickTokDashboard:
         
         def task():
             try:
-                # Fetch with real-time callback
+                # Fetch with real-time callback (minimum 10 products for Philippines)
                 products = self.product_fetcher.fetch_trending_products(
-                    limit=20, 
+                    limit=20,  # Fetch up to 20, but ensure at least 10
                     use_scraping=True,
                     on_product_found=on_product_found
                 )

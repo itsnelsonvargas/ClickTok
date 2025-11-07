@@ -33,12 +33,13 @@ class ProductFetcher:
 
     def fetch_trending_products(self, limit: int = 20, use_scraping: bool = True, on_product_found=None) -> List[Dict]:
         """
-        Fetch trending/highest bought products from TikTok Shop
+        Fetch trending/highest bought products from TikTok Shop (Philippines-focused)
         
         SIMPLIFIED VERSION - Just click Fetch and get products!
+        Ensures minimum 10 products are fetched for Philippines market.
         
         Args:
-            limit: Maximum number of products to fetch
+            limit: Maximum number of products to fetch (minimum 10)
             use_scraping: If True, use web scraping when API unavailable (default: True)
             on_product_found: Callback function(product_dict) called when each product is found (for real-time display)
         
@@ -47,32 +48,45 @@ class ProductFetcher:
         2. Smart Scraping - Auto-navigates to trending products (SIMPLIFIED!)
         3. Demo data (fallback only)
         """
-        logger.info(f"Fetching up to {limit} highest bought products...")
+        # Ensure minimum 10 products for Philippines market
+        min_limit = max(limit, 10)
+        logger.info(f"Fetching up to {min_limit} highest bought products (Philippines market)...")
 
         # Method 1: Official API (Recommended if available)
         if self._has_api_credentials():
-            products = self._fetch_via_api(limit, on_product_found=on_product_found)
-            if products:
+            products = self._fetch_via_api(min_limit, on_product_found=on_product_found)
+            if products and len(products) >= 10:
                 return products
-            logger.warning("API fetch returned no products, falling back to scraping...")
+            logger.warning("API fetch returned insufficient products, falling back to scraping...")
 
         # Method 2: Smart Auto-Scraping (NEW - No manual navigation needed!)
+        # This method uses search queries which work better than direct shop URLs
         if use_scraping:
-            logger.info("🔍 Auto-fetching highest bought products...")
-            products = self._fetch_highest_bought_auto(limit, on_product_found=on_product_found)
-            if products:
+            logger.info("🔍 Auto-fetching highest bought products (Philippines) via search...")
+            products = self._fetch_highest_bought_auto(min_limit, on_product_found=on_product_found)
+            if products and len(products) >= 10:
                 logger.info(f"✅ Successfully fetched {len(products)} products!")
                 return products
-            logger.warning("Auto-scraping returned no products, trying manual scraping...")
+            elif products:
+                logger.warning(f"Only found {len(products)} products from search, trying direct scraping...")
+            else:
+                logger.warning("Search-based scraping returned no products, trying direct URLs...")
             
-            # Fallback to manual scraping
-            products = self._fetch_via_scraping(limit, on_product_found=on_product_found)
-            if products:
-                return products
+            # Fallback to direct scraping (but skip quickly if URLs fail)
+            try:
+                products = self._fetch_via_scraping(min_limit, on_product_found=on_product_found)
+                if products and len(products) >= 10:
+                    return products
+                elif products:
+                    logger.warning(f"Direct scraping found {len(products)} products, combining with demo data...")
+            except Exception as e:
+                logger.debug(f"Direct scraping failed: {e}, will use demo data")
+                products = []
 
-        # Method 3: Demo data (Fallback)
-        logger.warning("Using demo products (scraping failed - try manual entry instead)")
-        return self._generate_demo_products(limit, on_product_found=on_product_found)
+        # Method 3: Demo data (Fallback) - Ensure at least 10 products
+        logger.warning("Using demo products to ensure minimum 10 products")
+        demo_products = self._generate_demo_products(min_limit, on_product_found=on_product_found)
+        return demo_products
     
 
     def _has_api_credentials(self) -> bool:
@@ -156,12 +170,13 @@ class ProductFetcher:
 
     def _generate_demo_products(self, limit: int, on_product_found=None) -> List[Dict]:
         """
-        Generate demo products for testing
+        Generate demo products for testing (Philippines market focused)
         Replace this with real API integration
         """
-        categories = self.filters.get('categories', ['Electronics', 'Beauty', 'Fashion'])
+        categories = self.filters.get('categories', ['Beauty', 'Skincare', 'Fashion', 'Electronics', 'Home', 'Lifestyle'])
         demo_products = []
 
+        # Philippines market popular products
         product_names = [
             "Wireless Bluetooth Earbuds Pro",
             "LED Makeup Mirror with Lights",
@@ -173,10 +188,18 @@ class ProductFetcher:
             "Resistance Bands Set",
             "Face Roller Jade Stone",
             "Laptop Stand Adjustable",
+            "Korean Skincare Set",
+            "Fashionable Crossbody Bag",
+            "Wireless Mouse Pad",
+            "Phone Case with Stand",
+            "Mini Portable Fan",
         ]
 
-        for i in range(min(limit, len(product_names))):
-            price = random.uniform(15, 150)
+        # Ensure at least 10 products
+        num_products = max(limit, 10)
+        for i in range(min(num_products, len(product_names))):
+            # Philippines market price range: PHP 112-1680 (USD 2-30)
+            price = random.uniform(2, 30)
             commission_rate = random.uniform(8, 25)
 
             product = {
@@ -252,18 +275,20 @@ class ProductFetcher:
             from playwright.sync_api import sync_playwright
             
             logger.info("=" * 70)
-            logger.info("🚀 AUTO-FETCHING HIGHEST BOUGHT PRODUCTS")
+            logger.info("🚀 AUTO-FETCHING HIGHEST BOUGHT PRODUCTS (PHILIPPINES)")
             logger.info("=" * 70)
-            logger.info("Browser will open automatically...")
+            logger.info("Running in headless mode (no browser window)...")
             logger.info("Products will appear in table as they're found! 📊")
             logger.info("=" * 70)
             
             with sync_playwright() as p:
-                browser = p.chromium.launch(headless=False, slow_mo=200)
+                browser = p.chromium.launch(headless=True, slow_mo=200)
                 
                 context = browser.new_context(
                     viewport={'width': 1920, 'height': 1080},
                     user_agent='Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+                    locale='en-PH',
+                    timezone_id='Asia/Manila',
                 )
                 
                 # Load cookies if available
@@ -281,27 +306,42 @@ class ProductFetcher:
                 page = context.new_page()
                 products = []
                 
-                # Strategy: Search TikTok for trending product videos
+                # Strategy: Search TikTok for trending product videos (Philippines-focused)
                 search_queries = [
-                    "highest sold product tiktok shop",
-                    "best selling item philippines",
-                    "trending product philippines"
+                    "tiktok shop philippines bestseller",
+                    "best selling tiktok shop ph",
+                    "trending product philippines 2024",
+                    "must have product philippines",
+                    "tiktok shop ph sulit",
+                    "best buy philippines tiktok",
+                    "affordable product philippines",
+                    "viral product philippines"
                 ]
                 
                 for query in search_queries:
                     try:
-                        logger.info(f"🔍 Searching: '{query}'...")
+                        # Stop if we have enough products (at least 10)
+                        if len(products) >= max(limit, 10):
+                            break
+                            
+                        logger.info(f"🔍 Searching: '{query}'... (Found {len(products)}/{max(limit, 10)} products so far)")
                         search_url = f"https://www.tiktok.com/search?q={query.replace(' ', '%20')}"
                         
-                        page.goto(search_url, wait_until='domcontentloaded', timeout=20000)
-                        time.sleep(4)
+                        try:
+                            page.goto(search_url, wait_until='domcontentloaded', timeout=15000)
+                            time.sleep(3)  # Reduced wait time
+                        except Exception as e:
+                            error_msg = str(e).lower()
+                            if 'timeout' in error_msg or 'connection' in error_msg:
+                                logger.warning(f"⏭️  Search '{query}' timed out, trying next query...")
+                                continue
+                            else:
+                                raise
                         
                         # Check if login required
                         if 'login' in page.url.lower():
-                            logger.warning("⚠️  Login required. Waiting 30 seconds...")
-                            time.sleep(30)
-                            page.reload()
-                            time.sleep(3)
+                            logger.warning("⚠️  Login required. Skipping this search...")
+                            continue
                         
                         # Scroll to load videos
                         logger.info("📜 Loading videos...")
@@ -312,18 +352,21 @@ class ProductFetcher:
                         time.sleep(2)
                         
                         # Extract products - WITH REAL-TIME CALLBACK
+                        remaining_needed = max(limit, 10) - len(products)
                         extracted = self._extract_products_from_search_page(
                             page, 
-                            limit - len(products),
+                            remaining_needed,
                             on_product_found=on_product_found
                         )
                         
                         if extracted:
                             products.extend(extracted)
-                            logger.info(f"✅ Found {len(extracted)} products")
+                            logger.info(f"✅ Found {len(extracted)} products (Total: {len(products)})")
                             # Note: Callback is already called in _extract_products_from_search_page
                         
-                        if len(products) >= limit:
+                        # Continue until we have at least 10 products
+                        if len(products) >= max(limit, 10):
+                            logger.info(f"✅ Reached minimum of {max(limit, 10)} products!")
                             break
                             
                     except Exception as e:
@@ -465,22 +508,22 @@ class ProductFetcher:
             from playwright.sync_api import sync_playwright
             
             logger.info("=" * 60)
-            logger.info("Starting web scraping to fetch highest bought products...")
-            logger.info("Browser will open. You may need to log in if prompted.")
+            logger.info("Starting web scraping to fetch highest bought products (Philippines)...")
+            logger.info("Running in headless mode (automatic, no browser window)")
             logger.info("=" * 60)
             
             with sync_playwright() as p:
                 # Launch browser with realistic settings
                 browser = p.chromium.launch(
-                    headless=False,  # Visible for better compatibility with TikTok
+                    headless=True,  # Headless for automatic operation
                     slow_mo=200  # Slow down to appear more human
                 )
                 
                 context = browser.new_context(
                     viewport={'width': 1920, 'height': 1080},
                     user_agent='Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
-                    locale='en-US',
-                    timezone_id='America/New_York',
+                    locale='en-PH',
+                    timezone_id='Asia/Manila',
                     permissions=['geolocation'],
                     extra_http_headers={
                         'Accept-Language': 'en-US,en;q=0.9',
@@ -521,26 +564,34 @@ class ProductFetcher:
                     logger.info("   Continuing anyway...")
                 
                 # Try multiple TikTok Shop URLs and alternative methods
+                # Note: Direct shop URLs often fail, so we prioritize search URLs
                 shop_urls = [
-                    'https://www.tiktok.com/shop',
-                    'https://www.tiktok.com/affiliate',
-                    'https://www.tiktok.com/search?q=shop',
+                    'https://www.tiktok.com/search?q=shop',  # Search URLs work better
                     'https://www.tiktok.com/search?q=product',
+                    'https://www.tiktok.com/shop',  # Direct URLs often fail
+                    'https://www.tiktok.com/affiliate',
                 ]
                 
                 products = []
                 manual_navigation_allowed = False
                 
                 # First, try to detect if user wants manual navigation
-                logger.info("🌐 Starting product discovery...")
-                logger.info("   If TikTok Shop URLs don't work, you can manually navigate to any product page")
+                logger.info("🌐 Starting product discovery via search (more reliable)...")
+                logger.info("   Skipping problematic direct URLs, using search-based discovery")
                 
                 for url in shop_urls:
                     try:
+                        # Skip direct shop URLs quickly if they're known to fail
+                        if url in ['https://www.tiktok.com/shop', 'https://www.tiktok.com/affiliate']:
+                            logger.info(f"⏭️  Skipping {url} (known to timeout, using search instead)")
+                            continue
+                            
                         logger.info(f"🔍 Attempting to navigate to {url}...")
                         
+                        # Use shorter timeout for problematic URLs
+                        timeout = 10000 if 'shop' in url or 'affiliate' in url else 20000
                         # Use domcontentloaded instead of networkidle for faster loading
-                        response = page.goto(url, wait_until='domcontentloaded', timeout=20000)
+                        response = page.goto(url, wait_until='domcontentloaded', timeout=timeout)
                         time.sleep(3)  # Wait for dynamic content to load
                         
                         # Check for 404 or redirect errors
@@ -630,41 +681,56 @@ class ProductFetcher:
                             logger.info("   Trying next method...")
                             
                     except Exception as e:
-                        logger.warning(f"❌ Error with {url}: {e}")
+                        error_msg = str(e).lower()
+                        # Skip problematic URLs faster
+                        if 'timeout' in error_msg or 'connection' in error_msg or 'closed' in error_msg:
+                            logger.warning(f"⏭️  Skipping {url} (connection/timeout issue)")
+                            logger.info("   Continuing with search-based methods...")
+                        else:
+                            logger.warning(f"❌ Error with {url}: {e}")
                         logger.debug(f"   Details: {str(e)}", exc_info=True)
                         continue
                 
-                # If still no products, try searching TikTok for product-related content
-                if not products and not manual_navigation_allowed:
-                    logger.info("🔍 Trying alternative: Search TikTok for product videos...")
+                # If still no products, try searching TikTok for product-related content (Philippines-focused)
+                if len(products) < max(limit, 10) and not manual_navigation_allowed:
+                    logger.info("🔍 Trying additional Philippines-focused searches...")
                     try:
                         search_urls = [
-                            'https://www.tiktok.com/search?q=must%20have%20product',
-                            'https://www.tiktok.com/search?q=amazon%20find',
-                            'https://www.tiktok.com/search?q=shop%20now',
+                            'https://www.tiktok.com/search?q=tiktok%20shop%20philippines',
+                            'https://www.tiktok.com/search?q=must%20have%20product%20philippines',
+                            'https://www.tiktok.com/search?q=affordable%20product%20ph',
                         ]
                         
-                        for search_url in search_urls[:1]:  # Try first search only
+                        for search_url in search_urls:
+                            if len(products) >= max(limit, 10):
+                                break
                             try:
                                 logger.info(f"   Searching: {search_url}")
-                                page.goto(search_url, wait_until='domcontentloaded', timeout=20000)
-                                time.sleep(4)
+                                page.goto(search_url, wait_until='domcontentloaded', timeout=15000)
+                                time.sleep(3)
                                 
                                 # Scroll to load videos
                                 for i in range(3):
                                     page.evaluate("window.scrollTo(0, document.body.scrollHeight)")
-                                    time.sleep(2)
+                                    time.sleep(1.5)
                                 
                                 # Look for product links in video descriptions
-                                extracted = self._extract_products_from_videos(page, limit)
+                                remaining = max(limit, 10) - len(products)
+                                extracted = self._extract_products_from_videos(page, remaining)
                                 if extracted:
                                     products.extend(extracted)
-                                    logger.info(f"✅ Found {len(extracted)} products from video search")
-                                    break
-                            except:
+                                    logger.info(f"✅ Found {len(extracted)} products from video search (Total: {len(products)})")
+                                    if on_product_found:
+                                        for p in extracted:
+                                            try:
+                                                on_product_found(p)
+                                            except:
+                                                pass
+                            except Exception as e:
+                                logger.debug(f"Search {search_url} failed: {e}")
                                 continue
                     except Exception as e:
-                        logger.debug(f"Video search failed: {e}")
+                        logger.debug(f"Additional video search failed: {e}")
                 
                 # Save cookies for next time
                 try:
@@ -1205,10 +1271,12 @@ class ProductFetcher:
                 from playwright.sync_api import sync_playwright
                 
                 with sync_playwright() as p:
-                    browser = p.chromium.launch(headless=False, slow_mo=300)
+                    browser = p.chromium.launch(headless=True, slow_mo=300)
                     context = browser.new_context(
                         viewport={'width': 1920, 'height': 1080},
                         user_agent='Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
+                        locale='en-PH',
+                        timezone_id='Asia/Manila',
                     )
                     page = context.new_page()
                     
